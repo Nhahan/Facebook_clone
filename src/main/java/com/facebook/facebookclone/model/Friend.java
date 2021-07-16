@@ -1,5 +1,6 @@
 package com.facebook.facebookclone.model;
 
+import com.facebook.facebookclone.dto.FriendRequestDto;
 import com.facebook.facebookclone.repository.mapping.ArticleMemberMapping;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,16 @@ public class Friend {
     private final List<String> friendList = new ArrayList<>();
 
     @Transient
-    private final Long totalFriends = this.id;
+    private Long totalFriends;
+
+    public Friend(FriendRequestDto requestDto) {
+        this.username = requestDto.getUsername();
+        this.friendName = requestDto.getFriendName();
+    }
+
+    public void addTotalFriends(Long totalFriends) {
+        this.totalFriends = totalFriends;
+    }
 
     public void addFriendList(ArticleMemberMapping likeItUser) {
         this.friendList.add(likeItUser.getUsername());

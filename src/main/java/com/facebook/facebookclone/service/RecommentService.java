@@ -32,9 +32,7 @@ public class RecommentService {
 
     @Transactional
     public void putRecomment(Long id, RecommentRequestDto requestDto) {
-        Recomment recomment = recommentRepository.findById(id).orElseThrow(
-                () -> new NullPointerException("아이디가 존재하지 않습니다.")
-        );
+        Recomment recomment = recommentRepository.findById(id).orElseThrow(() -> new NullPointerException("아이디가 존재하지 않습니다."));
         recomment.recommentUpdate(requestDto);
     }
 
