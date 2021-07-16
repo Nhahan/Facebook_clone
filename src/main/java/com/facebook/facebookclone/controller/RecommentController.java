@@ -13,11 +13,11 @@ import java.util.List;
 @RestController
 public class RecommentController {
 
-    private final RecommentRepository recommentRepository; // CRUD하려면 DB 필요
-    private final RecommentService recommentService; // 업데이트용
+    private final RecommentRepository recommentRepository;
+    private final RecommentService recommentService;
 
-    @GetMapping("/recomment") // 댓글 전체 조회
-    public List<Recomment> readRecomments(@RequestParam(value = "username", required = true) String username) {
+    @GetMapping("/recomment/{username}") // 댓글 전체 조회
+    public List<Recomment> readRecomments(@PathVariable String username) {
         List<Recomment> recommentList = recommentRepository.findAllByOrderByIdDesc();
         return recommentService.recommentLikeItCounter(recommentList, username);
     }
@@ -30,5 +30,10 @@ public class RecommentController {
     @PutMapping("/user/recomment/{recommentId}")
     public void putRecomment(@PathVariable Long recommentId, @RequestBody RecommentRequestDto requestDto) {
         recommentService.putRecomment(recommentId, requestDto);
+    }
+
+    @DeleteMapping("/user/article/{recommentId}")
+    public void deleteRecomment(@PathVariable Long recommentId) {
+        recommentRepository.deleteById(recommentId);
     }
 }

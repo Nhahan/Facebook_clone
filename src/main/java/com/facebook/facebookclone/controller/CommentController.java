@@ -13,11 +13,11 @@ import java.util.List;
 @RestController
 public class CommentController {
 
-    private final CommentRepository commentRepository; // CRUD하려면 DB 필요
-    private final CommentService commentService; // 업데이트용
+    private final CommentRepository commentRepository;
+    private final CommentService commentService;
 
-    @GetMapping("/comment") // 댓글 조회
-    public List<Comment> readComments(@RequestParam(value = "username", required = true) String username) {
+    @GetMapping("/comment/{username}") // 댓글 조회
+    public List<Comment> readComments(@PathVariable String username) {
         List<Comment> commentList = commentRepository.findAllByOrderByIdDesc();
         return commentService.commentLikeItCounter(commentList, username);
     }
@@ -30,5 +30,10 @@ public class CommentController {
     @PutMapping("/user/comment/{commentId}")
     public void putComment(@PathVariable Long commentId, @RequestBody CommentRequestDto requestDto) {
         commentService.putComment(commentId, requestDto);
+    }
+
+    @DeleteMapping("/user/article/{commentId}")
+    public void deleteComment(@PathVariable Long commentId) {
+        commentRepository.deleteById(commentId);
     }
 }
