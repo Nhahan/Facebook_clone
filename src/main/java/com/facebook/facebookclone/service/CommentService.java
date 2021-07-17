@@ -1,10 +1,6 @@
 package com.facebook.facebookclone.service;
 
-
-import com.facebook.facebookclone.dto.ArticleRequestDto;
 import com.facebook.facebookclone.dto.CommentRequestDto;
-import com.facebook.facebookclone.model.Article;
-import com.facebook.facebookclone.model.ArticleLikeIt;
 import com.facebook.facebookclone.model.Comment;
 import com.facebook.facebookclone.model.CommentLikeIt;
 import com.facebook.facebookclone.repository.CommentLikeItRepository;

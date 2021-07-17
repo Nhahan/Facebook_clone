@@ -1,6 +1,5 @@
 package com.facebook.facebookclone.model;
 
-import com.facebook.facebookclone.dto.CommentLikeItRequestDto;
 import com.facebook.facebookclone.dto.RecommentLikeItRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

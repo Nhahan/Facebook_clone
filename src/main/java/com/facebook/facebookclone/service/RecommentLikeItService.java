@@ -1,11 +1,7 @@
 package com.facebook.facebookclone.service;
 
-import com.facebook.facebookclone.dto.CommentLikeItRequestDto;
 import com.facebook.facebookclone.dto.RecommentLikeItRequestDto;
-import com.facebook.facebookclone.model.CommentLikeIt;
 import com.facebook.facebookclone.model.RecommentLikeIt;
-import com.facebook.facebookclone.repository.CommentLikeItRepository;
-import com.facebook.facebookclone.repository.CommentRepository;
 import com.facebook.facebookclone.repository.RecommentLikeItRepository;
 import com.facebook.facebookclone.repository.RecommentRepository;
 import lombok.RequiredArgsConstructor;

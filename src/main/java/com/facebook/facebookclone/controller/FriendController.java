@@ -1,8 +1,6 @@
 package com.facebook.facebookclone.controller;
 
 import com.facebook.facebookclone.dto.FriendRequestDto;
-import com.facebook.facebookclone.repository.FriendRepository;
-import com.facebook.facebookclone.repository.mapping.FriendMapping;
 import com.facebook.facebookclone.service.FriendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +29,9 @@ public class FriendController {
         friendService.deleteFriend(requestDto);
     }
 
-    @GetMapping("/user/friendsRecommend/{username}") // 친추 추천 목록
-    public Map<String, List<String>> getFriendsRecommned(@PathVariable String username) {
-        return friendService.getFriendsRecommend(username);
+    @GetMapping("/user/friendsRecommend") // 친추 추천 목록
+    public Map<String, List<String>> getFriendsRecommned() {
+        return friendService.getFriendsRecommend();
     }
 }
 
