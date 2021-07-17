@@ -6,37 +6,45 @@ import com.facebook.facebookclone.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @RequiredArgsConstructor
 @Service
 public class UserProfileService {
 
     private final UserProfileRepository userProfileRepository;
 
+    @Transactional
     public void createPicture(UserProfileRequestDto requestDto) {
         UserProfile userProfile = new UserProfile(requestDto);
         userProfileRepository.save(userProfile);
     }
 
+    @Transactional
     public void createCover(UserProfileRequestDto requestDto) {
         UserProfile userProfile = new UserProfile(requestDto);
         userProfileRepository.save(userProfile);
     }
 
+    @Transactional
     public void putPicture(UserProfileRequestDto requestDto) {
         UserProfile userProfile = userProfileRepository.findByUsername(requestDto.getUsername());
         userProfile.pictureUpdate(requestDto.getPicture());
     }
 
+    @Transactional
     public void putCover(UserProfileRequestDto requestDto) {
         UserProfile userProfile = userProfileRepository.findByUsername(requestDto.getUsername());
         userProfile.coverUpdate(requestDto.getCover());
     }
 
+    @Transactional
     public void deletePicture(String username) {
         UserProfile userProfile = userProfileRepository.findByUsername(username);
         userProfile.pictureUpdate("null");
     }
 
+    @Transactional
     public void deleteCover(String username) {
         UserProfile userProfile = userProfileRepository.findByUsername(username);
         userProfile.coverUpdate("null");

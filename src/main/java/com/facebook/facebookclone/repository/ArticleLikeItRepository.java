@@ -1,7 +1,7 @@
 package com.facebook.facebookclone.repository;
 
 import com.facebook.facebookclone.model.ArticleLikeIt;
-import com.facebook.facebookclone.repository.mapping.ArticleMemberMapping;
+import com.facebook.facebookclone.repository.mapping.UsernameMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -10,5 +10,5 @@ public interface ArticleLikeItRepository extends JpaRepository<ArticleLikeIt, Lo
     Long countByArticleId(Long articleId);
     void deleteByUsernameAndArticleId(String username, Long articleId);
     ArticleLikeIt findByUsernameAndArticleId(String username, Long articleId);
-    List<ArticleMemberMapping> findAllByArticleId(Long articleId);
+    List<UsernameMapping> findAllByArticleId(Long articleId);
 }

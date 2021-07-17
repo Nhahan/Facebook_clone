@@ -2,7 +2,7 @@ package com.facebook.facebookclone.model;
 
 
 import com.facebook.facebookclone.dto.ArticleRequestDto;
-import com.facebook.facebookclone.repository.mapping.ArticleMemberMapping;
+import com.facebook.facebookclone.repository.mapping.UsernameMapping;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -55,7 +55,7 @@ public class Article extends Timestamped {
         this.articleLikeItChecker = trueOrFalse;
     }
 
-    public void addLikeItUserList(ArticleMemberMapping likeItUser) {
+    public void addLikeItUserList(UsernameMapping likeItUser) {
         this.articleLikeItUserList.add(likeItUser.getUsername());
     }
 

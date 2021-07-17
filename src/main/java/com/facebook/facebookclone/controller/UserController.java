@@ -30,7 +30,7 @@ public class UserController {
 
     @PostMapping("/user/login")
     public String login(@RequestBody SignupRequestDto requestDto) {
-        User user = userRepository.findByUsername(requestDto.getUsername())
+        User user = userRepository.findByEmailAddress(requestDto.getEmailAddress())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 유저입니다."));
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");

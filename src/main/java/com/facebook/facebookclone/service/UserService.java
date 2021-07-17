@@ -41,16 +41,20 @@ public class UserService {
         String passwordChecker = requestDto.getPasswordChecker();
         String emailAddress = requestDto.getEmailAddress();
 
-        Optional<User> found = userRepository.findByUsername(username);
+        Optional<User> found = userRepository.findByEmailAddress(emailAddress);
         if (password.length() < 4) {
             throw new IllegalArgumentException("password는 최소 4글자입니다.");
         } else if (!password.equals(passwordChecker)) {
             throw new IllegalArgumentException("password와 passwordChecker가 다릅니다.");
         } else if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자 ID가 존재합니다.");
+            throw new IllegalArgumentException("중복된 EmailAddress가 존재합니다.");
         }
         password = passwordEncoder.encode(requestDto.getPassword());
         UserRole role = UserRole.USER;
+        String userIdentifier = String.valueOf(userRepository.countAllByUsernameContaining(username));
+
+        username = String.format("%s%s", username, userIdentifier); // username에 Id값 추가하기
+
         User user = new User(username, password, emailAddress, role);
         userRepository.save(user);
     }

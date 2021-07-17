@@ -1,7 +1,7 @@
 package com.facebook.facebookclone.model;
 
 import com.facebook.facebookclone.dto.FriendRequestDto;
-import com.facebook.facebookclone.repository.mapping.ArticleMemberMapping;
+import com.facebook.facebookclone.repository.mapping.UsernameMapping;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -39,7 +39,7 @@ public class Friend {
         this.totalFriends = totalFriends;
     }
 
-    public void addFriendList(ArticleMemberMapping likeItUser) {
+    public void addFriendList(UsernameMapping likeItUser) {
         this.friendList.add(likeItUser.getUsername());
     }
 }

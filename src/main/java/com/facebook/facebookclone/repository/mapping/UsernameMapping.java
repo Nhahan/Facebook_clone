@@ -1,5 +1,5 @@
 package com.facebook.facebookclone.repository.mapping;
 
-public interface ArticleMemberMapping {
+public interface UsernameMapping {
     String getUsername();
 }
