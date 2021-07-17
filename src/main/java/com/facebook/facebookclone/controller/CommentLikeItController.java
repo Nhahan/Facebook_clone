@@ -20,12 +20,12 @@ public class CommentLikeItController {
     private final CommentLikeItRepository commentLikeItRepository;
     private final CommentLikeItService commentLikeItService;
 
-    @PostMapping("/commentLikeIt") // 좋아요!
+    @PostMapping("/user/comment/likeIt") // 좋아요!
     public Map<String, Boolean> clickLike(@RequestBody CommentLikeItRequestDto requestDto) {
         return commentLikeItService.commentILikeIt(requestDto);
     }
 
-    @GetMapping("/commentLikeIt") // 좋아요 보기
+    @GetMapping("/user/comment/likeIt") // 좋아요 보기
     public List<CommentLikeIt> readCommentLikes() {
         return commentLikeItRepository.findAll();
     }

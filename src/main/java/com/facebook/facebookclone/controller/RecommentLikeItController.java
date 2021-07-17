@@ -17,12 +17,12 @@ public class RecommentLikeItController {
     private final RecommentLikeItRepository recommentLikeItRepository;
     private final RecommentLikeItService recommentLikeItService;
 
-    @PostMapping("/recommentLikeIt") // 좋아요!
+    @PostMapping("/user/recomment/likeIt") // 좋아요!
     public Map<String, Boolean> clickLike(@RequestBody RecommentLikeItRequestDto requestDto) {
         return recommentLikeItService.recommentILikeIt(requestDto);
     }
 
-    @GetMapping("/recommentLikeIt") // 좋아요 보기
+    @GetMapping("/user/recomment/likeIt") // 좋아요 보기
     public List<RecommentLikeIt> readCommentLikes() {
         return recommentLikeItRepository.findAll();
     }
