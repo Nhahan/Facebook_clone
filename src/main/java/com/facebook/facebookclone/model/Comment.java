@@ -34,7 +34,9 @@ public class Comment extends Timestamped {
     private Boolean commentLikeItChecker;
 
     public Comment(CommentRequestDto requestDto) {
-        super();
+        this.articleId = requestDto.getArticleId();
+        this.username = requestDto.getUsername();
+        this.content = requestDto.getContent();
     }
 
     public void addRecommentCount(Long count) {

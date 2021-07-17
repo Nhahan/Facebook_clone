@@ -1,6 +1,5 @@
 package com.facebook.facebookclone.model;
 
-import com.facebook.facebookclone.dto.CommentRequestDto;
 import com.facebook.facebookclone.dto.RecommentRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,7 +30,9 @@ public class Recomment extends Timestamped {
     private Boolean recommentLikeItChecker;
 
     public Recomment(RecommentRequestDto requestDto) {
-        super();
+        this.commentId = requestDto.getCommentId();
+        this.username = requestDto.getUsername();
+        this.content = requestDto.getContent();
     }
 
     public void addRecommentLikeItCount(Long count) {

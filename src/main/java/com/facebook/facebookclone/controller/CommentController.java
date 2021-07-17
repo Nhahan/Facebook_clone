@@ -16,7 +16,7 @@ public class CommentController {
     private final CommentRepository commentRepository;
     private final CommentService commentService;
 
-    @GetMapping("/comment/{username}") // 댓글 조회
+    @GetMapping("/user/comment/{username}") // 댓글 조회
     public List<Comment> readComments(@PathVariable String username) {
         List<Comment> commentList = commentRepository.findAllByOrderByIdDesc();
         return commentService.commentLikeItCounter(commentList, username);
@@ -32,7 +32,7 @@ public class CommentController {
         commentService.putComment(commentId, requestDto);
     }
 
-    @DeleteMapping("/user/article/{commentId}")
+    @DeleteMapping("/user/comment/{commentId}")
     public void deleteComment(@PathVariable Long commentId) {
         commentRepository.deleteById(commentId);
     }

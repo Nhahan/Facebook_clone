@@ -32,7 +32,7 @@ public class RecommentController {
         recommentService.putRecomment(recommentId, requestDto);
     }
 
-    @DeleteMapping("/user/article/{recommentId}")
+    @DeleteMapping("/user/recomment/{recommentId}")
     public void deleteRecomment(@PathVariable Long recommentId) {
         recommentRepository.deleteById(recommentId);
     }
