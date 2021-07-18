@@ -17,14 +17,9 @@ public class UserProfileController {
     private final UserProfileService userProfileService;
     private final UserProfileRepository userProfileRepository;
 
-    @PostMapping("/user/userprofile/picture") // 프로필 사진 등록
-    public void createPicture(@RequestBody UserProfileRequestDto requestDto) {
-        userProfileService.createPicture(requestDto);
-    }
-
-    @PostMapping("/user/userprofile/cover") // 커버 등록
-    public void createCover(@RequestBody UserProfileRequestDto requestDto) {
-        userProfileService.createCover(requestDto);
+    @PostMapping("/user/userprofile/initialize/{username}") // 유저 프로필 초기 세팅
+    public void initializeUserProfile(@PathVariable String username) {
+        userProfileService.initializeUserProfile(username);
     }
 
     @GetMapping("/user/userprofile/picture/{username}") // 프로필 사진 조회
@@ -39,12 +34,8 @@ public class UserProfileController {
         return userProfile.getCover();
     }
 
-    @GetMapping("/user/userprofile") // 프로필 사진, 커버 동시 조회
-    public UserProfile getUserProfile(@RequestParam(value = "username", required = true) String username) {
-        return userProfileRepository.findByUsername(username);
-    }
 
-    @PutMapping("/user/userprofile/picture") // 프로필 사진 등록
+    @PutMapping("/user/userprofile/picture") // 프로필 사진 수정
     public void uploadPicture(@RequestBody UserProfileRequestDto requestDto) {
         userProfileService.putPicture(requestDto);
     }

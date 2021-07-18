@@ -3,6 +3,7 @@ package com.facebook.facebookclone.service;
 import com.facebook.facebookclone.dto.UserProfileRequestDto;
 import com.facebook.facebookclone.model.UserProfile;
 import com.facebook.facebookclone.repository.UserProfileRepository;
+import com.facebook.facebookclone.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +18,19 @@ import java.util.Map;
 public class UserProfileService {
 
     private final UserProfileRepository userProfileRepository;
+    private final UserRepository userRepository;
 
-    @Transactional
-    public void createPicture(UserProfileRequestDto requestDto) {
-        UserProfile userProfile = new UserProfile(requestDto);
-        userProfileRepository.save(userProfile);
-    }
-
-    @Transactional
-    public void createCover(UserProfileRequestDto requestDto) {
-        UserProfile userProfile = new UserProfile(requestDto);
-        userProfileRepository.save(userProfile);
-    }
+//    @Transactional
+//    public void createPicture(UserProfileRequestDto requestDto) {
+//        UserProfile userProfile = new UserProfile(requestDto);
+//        userProfileRepository.save(userProfile);
+//    }
+//
+//    @Transactional
+//    public void createCover(UserProfileRequestDto requestDto) {
+//        UserProfile userProfile = new UserProfile(requestDto);
+//        userProfileRepository.save(userProfile);
+//    }
 
     @Transactional
     public void putPicture(UserProfileRequestDto requestDto) {
@@ -45,13 +47,13 @@ public class UserProfileService {
     @Transactional
     public void deletePicture(String username) {
         UserProfile userProfile = userProfileRepository.findByUsername(username);
-        userProfile.pictureUpdate("null");
+        userProfile.pictureUpdate("");
     }
 
     @Transactional
     public void deleteCover(String username) {
         UserProfile userProfile = userProfileRepository.findByUsername(username);
-        userProfile.coverUpdate("null");
+        userProfile.coverUpdate("");
     }
 
     public Map<String, List<String>> getPictureList(String username) {
@@ -63,5 +65,14 @@ public class UserProfileService {
         pictureListMap.put("pictures", pictureList);
 
         return pictureListMap;
+    }
+
+    @Transactional
+    public void initializeUserProfile(String username) {
+        if (userRepository.findByUsername(username).isPresent()) {
+            userProfileRepository.save(new UserProfile(username));
+        } else {
+            throw new NullPointerException(username + " 유저가 존재하지 않습니다.");
+        }
     }
 }

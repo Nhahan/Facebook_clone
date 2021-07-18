@@ -3,7 +3,9 @@ package com.facebook.facebookclone.service;
 import com.facebook.facebookclone.dto.FriendRequestDto;
 import com.facebook.facebookclone.model.Friend;
 import com.facebook.facebookclone.repository.FriendRepository;
+import com.facebook.facebookclone.repository.UserProfileRepository;
 import com.facebook.facebookclone.repository.UserRepository;
+import com.facebook.facebookclone.repository.mapping.FriendObjectMappingFromUserProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,7 @@ public class FriendService {
 
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
+    private final UserProfileRepository userProfileRepository;
 
     @Transactional
     public void addFriend(FriendRequestDto requestDto) {
@@ -33,42 +36,49 @@ public class FriendService {
     }
 
     @Transactional
-    public void deleteFriend(FriendRequestDto requestDto) {
-        if (userRepository.findByUsername(requestDto.getUsername()).isPresent() && userRepository.findByUsername(requestDto.getFriendName()).isPresent()) {
-            if (friendRepository.findAllByUsernameAndFriendName(requestDto.getUsername(), requestDto.getFriendName()).isEmpty()) {
-                throw new IllegalArgumentException(requestDto.getUsername() + "&" + requestDto.getFriendName() + " -> 친구가 아닙니다.");
+    public void deleteFriend(String username, String friendName) {
+        if (userRepository.findByUsername(username).isPresent() && userRepository.findByUsername(friendName).isPresent()) {
+            if (friendRepository.findAllByUsernameAndFriendName(username, friendName).isEmpty()) {
+                throw new IllegalArgumentException(username + "&" + friendName + " -> 친구가 아닙니다.");
             } else {
-                friendRepository.deleteAllByUsernameAndFriendName(requestDto.getUsername(), requestDto.getFriendName());
+                friendRepository.deleteAllByUsernameAndFriendName(username, friendName);
             }
         } else {
             throw new NullPointerException("존재하지 않는 유저입니다.");
         }
     }
 
-    public Map<String, List<String>> myFriendsList(String username) {
+    public Map<String, List<FriendObjectMappingFromUserProfile>> myFriendsList(String username) {
         if (userRepository.findByUsername(username).isPresent()) {
-            Map<String, List<String>> friendsListMap = new HashMap<>();
+            Map<String, List<FriendObjectMappingFromUserProfile>> friendsListMap = new HashMap<>();
             List<String> friendsList = new ArrayList<>();
+            List<FriendObjectMappingFromUserProfile> friendObjectsList = new ArrayList<>();
 
             friendRepository.findAllByUsername(username).forEach(s -> friendsList.add(s.getFriendName()));
-            friendsListMap.put("friends", friendsList);
+
+            for (String friendName : friendsList) {
+                friendObjectsList.add(userProfileRepository.getByUsername(friendName));
+            }
+
+            friendsListMap.put("friends", friendObjectsList);
+
             return friendsListMap;
         } else {
             throw new NullPointerException(username + " -> 없는 username입니다.");
         }
     }
 
-    public Map<String, List<String>> getFriendsRecommend() {
-        Map<String, List<String>> friendsRecommendListMap = new HashMap<>();
-        List<String> friendsRecommendList = new ArrayList<>();
+    public Map<String, List<FriendObjectMappingFromUserProfile>> getFriendsRecommend() {
+        Map<String, List<FriendObjectMappingFromUserProfile>> friendsRecommendListMap = new HashMap<>();
+        List<FriendObjectMappingFromUserProfile> friendsRecommendList = new ArrayList<>();
         HashSet<Integer> pageSet = new HashSet<>();
 
         Random random = new Random();
 
-        long dataSize = userRepository.count();
+        long dataSize = userProfileRepository.count();
 
         if (dataSize <= 12) { // 서비스가 너무 작을 때
-            userRepository.findAll().forEach(s -> friendsRecommendList.add(s.getUsername()));
+            friendsRecommendList = userProfileRepository.findAllByOrderByModifiedAtDesc();
             Collections.shuffle(friendsRecommendList);
             friendsRecommendListMap.put("recommendFriends", friendsRecommendList);
             return friendsRecommendListMap;
@@ -84,7 +94,7 @@ public class FriendService {
 
         for (int i = 0; i < pageSet.size(); i++) {
             Pageable pageable = PageRequest.of(random.nextInt(), 3);
-            userRepository.findAllByOrderByCreatedAtDesc(pageable).forEach(s -> friendsRecommendList.add(s.getUsername()));
+            userProfileRepository.findAllByOrderByCreatedAtDesc(pageable).forEach(friendsRecommendList::add);
         }
         Collections.shuffle(friendsRecommendList);
         friendsRecommendListMap.put("recommendFriends", friendsRecommendList);

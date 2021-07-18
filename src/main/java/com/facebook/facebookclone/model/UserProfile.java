@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class UserProfile {
+public class UserProfile extends Timestamped {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -28,6 +28,12 @@ public class UserProfile {
         this.username = requestDto.getUsername();
         this.picture = requestDto.getPicture();
         this.cover = requestDto.getCover();
+    }
+
+    public UserProfile(String username) {
+        this.username = username;
+        this.picture = "";
+        this.cover = "";
     }
 
     public void pictureUpdate(String picture) {

@@ -13,5 +13,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmailAddress(String emailAddress);
     Long countAllByUsernameContaining(String username);
     Optional<User> findByKakaoId(Long kakaoId);
-    Page<UsernameMapping> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    Optional<Object> findTopByUsername(String username);
+
+    Optional<UsernameMapping> findFirstByUsernameContaining(String username);
+//    Page<UsernameMapping> findAllByOrderByCreatedAtDesc(Pageable pageable);
 }

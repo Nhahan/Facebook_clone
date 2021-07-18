@@ -19,16 +19,19 @@ public class Article extends Timestamped {
     @Id
     private Long id;
 
-    @Column(length = 12, nullable = false, unique = true)
+    @Column(length = 12, nullable = false)
     private String username;
 
     @Column(nullable = false)
+    @Lob
     private String content;
 
     @Column(nullable = true)
+    @Lob
     private String picture;
 
     @Column(nullable = true)
+    @Lob
     private String video;
 
     @Transient
