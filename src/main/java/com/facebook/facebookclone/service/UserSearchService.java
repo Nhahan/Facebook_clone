@@ -7,6 +7,7 @@ import com.facebook.facebookclone.repository.mapping.UsernameMapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,13 @@ public class UserSearchService {
         return usernameMapping.map(mapping -> mapping.getUsername().replaceAll("[0-9]", "")).orElse("");
     }
 
-    public List<FriendObjectMappingFromUserProfile> searchUserByUsernameContaining(String username) {
+    public HashSet<String> getUsernameSet(String username) {
+        HashSet<String> usernameSet = new HashSet<>();
+        userProfileRepository.findAllByUsernameContaining(username).forEach(s -> usernameSet.add(s.getUsername().replaceAll("[0-9]", "")));
+        return usernameSet;
+    }
+
+    public List<FriendObjectMappingFromUserProfile> getExactUsernameList(String username) {
         return userProfileRepository.findAllByUsernameContaining(username);
     }
 }

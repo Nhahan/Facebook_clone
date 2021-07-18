@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashSet;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -21,7 +22,12 @@ public class UserSearchController {
     }
 
     @GetMapping("/user/search/contain-list/{username}")
-    public List<FriendObjectMappingFromUserProfile> nameContainList(@PathVariable String username) {
-        return userSearchService.searchUserByUsernameContaining(username);
+    public HashSet<String> nameContainList(@PathVariable String username) {
+        return userSearchService.getUsernameSet(username);
+    }
+
+    @GetMapping("/user/search/exact-list/{username}")
+    public List<FriendObjectMappingFromUserProfile> nameName(@PathVariable String username) {
+        return userSearchService.getExactUsernameList(username);
     }
 }
