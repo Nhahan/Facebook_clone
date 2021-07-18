@@ -1,11 +1,17 @@
 package com.facebook.facebookclone.controller;
 
-import com.facebook.facebookclone.dto.FriendRequestDto;
+import com.facebook.facebookclone.dto.FriendRequestRequestDto;
+import com.facebook.facebookclone.repository.FriendRequestRepository;
 import com.facebook.facebookclone.repository.mapping.FriendObjectMappingFromUserProfile;
 import com.facebook.facebookclone.service.FriendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,10 +20,11 @@ import java.util.Map;
 public class FriendController {
 
     private final FriendService friendService;
+    private final FriendRequestRepository friendRequestRepository;
 
-    @PostMapping("/user/add-friend") // 친구 추가
-    public void addFriend(@RequestBody FriendRequestDto requestDto) {
-        friendService.addFriend(requestDto);
+    @PostMapping("/user/accept-friend") // 친구 추가
+    public void addFriend(@RequestBody FriendRequestRequestDto requestDto) {
+        friendService.acceptFriend(requestDto);
     }
 
     @GetMapping("/user/friends/{username}") // 친구 목록
@@ -28,11 +35,23 @@ public class FriendController {
     @DeleteMapping("/user/delete-friend/{username}/{friendName}") // 친구 삭제
     public void deleteFriend(@PathVariable String username, @PathVariable String friendName) {
         friendService.deleteFriend(username, friendName);
+        friendService.deleteFriend(friendName, username);
     }
 
     @GetMapping("/user/friends-recommend") // 친추 추천 목록
     public Map<String, List<FriendObjectMappingFromUserProfile>> getFriendsRecommend() {
         return friendService.getFriendsRecommend();
+    }
+
+    // 친구 신청 API 목록
+    @PostMapping("/user/request-friend") // 친구 신청
+    public void requestFriend(@RequestBody FriendRequestRequestDto requestDto) {
+        friendService.requestFriend(requestDto);
+    }
+
+    @GetMapping("/user/request-friend/{username}/{friendName}") // 친구 신청 여부 확인
+    public Map<String, Boolean> requestFriend(@PathVariable String username, @PathVariable String friendName) {
+        return friendService.requestFriendChecker(username, friendName);
     }
 }
 

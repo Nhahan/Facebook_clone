@@ -16,11 +16,6 @@ public class UserSearchController {
 
     private final UserSearchService userSearchService;
 
-    @GetMapping("/user/search/exist/{username}")
-    public String nameExist(@PathVariable String username) {
-        return userSearchService.searchName(username);
-    }
-
     @GetMapping("/user/search/contain-list/{username}")
     public HashSet<String> nameContainList(@PathVariable String username) {
         return userSearchService.getUsernameSet(username);
@@ -29,5 +24,10 @@ public class UserSearchController {
     @GetMapping("/user/search/exact-list/{username}")
     public List<FriendObjectMappingFromUserProfile> nameName(@PathVariable String username) {
         return userSearchService.getExactUsernameList(username);
+    }
+
+    @GetMapping("/user/search/all") // 확인용
+    public List<String> allUsername() {
+        return userSearchService.getAllUsername();
     }
 }

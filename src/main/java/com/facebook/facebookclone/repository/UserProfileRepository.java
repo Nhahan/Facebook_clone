@@ -14,6 +14,7 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, Long> 
     List<UserProfile> findAllByUsername(String username);
     List<FriendObjectMappingFromUserProfile> findAllByOrderByModifiedAtDesc();
     Page<FriendObjectMappingFromUserProfile> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    List<UserProfile> findAll();
 
     List<FriendObjectMappingFromUserProfile> findAllByUsernameContaining(String username);
 }

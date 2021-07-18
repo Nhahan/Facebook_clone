@@ -1,8 +1,10 @@
 package com.facebook.facebookclone.service;
 
-import com.facebook.facebookclone.dto.FriendRequestDto;
+import com.facebook.facebookclone.dto.FriendRequestRequestDto;
 import com.facebook.facebookclone.model.Friend;
+import com.facebook.facebookclone.model.FriendRequest;
 import com.facebook.facebookclone.repository.FriendRepository;
+import com.facebook.facebookclone.repository.FriendRequestRepository;
 import com.facebook.facebookclone.repository.UserProfileRepository;
 import com.facebook.facebookclone.repository.UserRepository;
 import com.facebook.facebookclone.repository.mapping.FriendObjectMappingFromUserProfile;
@@ -19,19 +21,23 @@ import java.util.*;
 public class FriendService {
 
     private final FriendRepository friendRepository;
+    private final FriendRequestRepository friendRequestRepository;
     private final UserRepository userRepository;
     private final UserProfileRepository userProfileRepository;
 
     @Transactional
-    public void addFriend(FriendRequestDto requestDto) {
-        if (userRepository.findByUsername(requestDto.getUsername()).isPresent() && userRepository.findByUsername(requestDto.getFriendName()).isPresent()) {
-            if (friendRepository.findAllByUsernameAndFriendName(requestDto.getUsername(), requestDto.getFriendName()).isEmpty()) {
-                friendRepository.save(new Friend(requestDto));
-            } else {
-                throw new IllegalArgumentException(requestDto.getUsername() + "&" + requestDto.getFriendName() + " -> 이미 등록된 친구입니다.");
-            }
+    public void acceptFriend(FriendRequestRequestDto requestDto) {
+        if (friendRequestRepository.findAllByUsernameAndFriendName(requestDto.getFriendName(), requestDto.getUsername()).isEmpty()) {
+            throw new NullPointerException("친구 신청이 없습니다.");
         } else {
-            throw new NullPointerException("존재하지 않는 유저입니다.");
+            if (friendRepository.findAllByUsernameAndFriendName(requestDto.getUsername(), requestDto.getFriendName()).isEmpty()) {
+                friendRepository.save(new Friend(requestDto.getUsername(), requestDto.getFriendName()));
+                if (friendRepository.findAllByUsernameAndFriendName(requestDto.getFriendName(), requestDto.getUsername()).isEmpty()) {
+                    friendRepository.save(new Friend(requestDto.getFriendName(), requestDto.getUsername()));
+                }
+            friendRequestRepository.deleteByUsernameAndFriendName(requestDto.getUsername(), requestDto.getFriendName());
+            friendRequestRepository.deleteByUsernameAndFriendName(requestDto.getFriendName(), requestDto.getUsername());
+            }
         }
     }
 
@@ -99,5 +105,24 @@ public class FriendService {
         Collections.shuffle(friendsRecommendList);
         friendsRecommendListMap.put("recommendFriends", friendsRecommendList);
         return friendsRecommendListMap;
+    }
+
+    @Transactional
+    public void requestFriend(FriendRequestRequestDto requestDto) {
+        if (userRepository.findByUsername(requestDto.getUsername()).isPresent() && userRepository.findByUsername(requestDto.getFriendName()).isPresent()) {
+            if (friendRequestRepository.findAllByUsernameAndFriendName(requestDto.getUsername(), requestDto.getFriendName()).isEmpty()) {
+                friendRequestRepository.save(new FriendRequest(requestDto.getUsername(), requestDto.getFriendName()));
+            } else {
+                throw new IllegalArgumentException(requestDto.getUsername() + "&" + requestDto.getFriendName() + " -> 이미 신청 중인 친구입니다.");
+            }
+        } else {
+            throw new NullPointerException("존재하지 않는 유저입니다.");
+        }
+    }
+
+    public Map<String, Boolean> requestFriendChecker(String username, String friendName) {
+        Map<String, Boolean> requestFriendCheckerMap = new HashMap<>();
+        requestFriendCheckerMap.put("requestChecker", !friendRequestRepository.findAllByUsernameAndFriendName(username, friendName).isEmpty());
+        return requestFriendCheckerMap;
     }
 }
