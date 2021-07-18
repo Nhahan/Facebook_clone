@@ -35,7 +35,7 @@ public class CommentService {
         comment.commentUpdate(requestDto);
     }
 
-    public List<Comment> commentLikeItCounter(List<Comment> commentList, String username) {
+    public List<Comment> getCommentWithLikeItCounter(List<Comment> commentList, String username) {
         for (Comment value : commentList) {
             Long commentId = value.getId();
             Long recommentCount = recommentRepository.countByCommentId(commentId);

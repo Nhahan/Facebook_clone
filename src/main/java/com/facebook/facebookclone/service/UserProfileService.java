@@ -7,6 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -50,4 +54,14 @@ public class UserProfileService {
         userProfile.coverUpdate("null");
     }
 
+    public Map<String, List<String>> getPictureList(String username) {
+        Map<String, List<String>> pictureListMap = new HashMap<>();
+        List<String> pictureList = new ArrayList<>();
+
+        userProfileRepository.findAllByUsername(username).forEach(s -> pictureList.add(s.getPicture()));
+
+        pictureListMap.put("pictures", pictureList);
+
+        return pictureListMap;
+    }
 }

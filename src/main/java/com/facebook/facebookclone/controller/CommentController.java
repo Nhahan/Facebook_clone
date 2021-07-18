@@ -16,10 +16,10 @@ public class CommentController {
     private final CommentRepository commentRepository;
     private final CommentService commentService;
 
-    @GetMapping("/user/comment/{username}") // 댓글 조회
-    public List<Comment> readComments(@PathVariable String username) {
-        List<Comment> commentList = commentRepository.findAllByOrderByIdDesc();
-        return commentService.commentLikeItCounter(commentList, username);
+    @GetMapping("/user/comment") // 댓글 조회
+    public List<Comment> readComments(@RequestParam String username, @RequestParam Long articleId) {
+        List<Comment> commentList = commentRepository.findAllByUsernameAndArticleId(username, articleId);
+        return commentService.getCommentWithLikeItCounter(commentList, username);
     }
 
     @PostMapping("/user/comment")
@@ -32,8 +32,8 @@ public class CommentController {
         commentService.putComment(commentId, requestDto);
     }
 
-    @DeleteMapping("/user/comment/{commentId}")
-    public void deleteComment(@PathVariable Long commentId) {
-        commentRepository.deleteById(commentId);
+    @DeleteMapping("/user/comment")
+    public void deleteComment(@RequestParam String username, @RequestParam Long articleId) {
+        commentRepository.deleteByUsernameAndArticleId(username, articleId);
     }
 }

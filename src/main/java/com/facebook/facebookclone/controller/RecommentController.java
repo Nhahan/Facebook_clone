@@ -16,9 +16,9 @@ public class RecommentController {
     private final RecommentRepository recommentRepository;
     private final RecommentService recommentService;
 
-    @GetMapping("/recomment/{username}") // 댓글 전체 조회
-    public List<Recomment> readRecomments(@PathVariable String username) {
-        List<Recomment> recommentList = recommentRepository.findAllByOrderByIdDesc();
+    @GetMapping("/user/recomment") // 댓글 전체 조회
+    public List<Recomment> readRecomments(@RequestParam String username, @RequestParam Long commentId) {
+        List<Recomment> recommentList = recommentRepository.findAllByUsernameAndCommentId(username, commentId);
         return recommentService.recommentLikeItCounter(recommentList, username);
     }
 
@@ -32,8 +32,8 @@ public class RecommentController {
         recommentService.putRecomment(recommentId, requestDto);
     }
 
-    @DeleteMapping("/user/recomment/{recommentId}")
-    public void deleteRecomment(@PathVariable Long recommentId) {
-        recommentRepository.deleteById(recommentId);
+    @DeleteMapping("/user/recomment")
+    public void deleteRecomment(@RequestParam String username, @RequestParam Long commentId) {
+        recommentRepository.deleteByUsernameAndCommentId(username, commentId);
     }
 }

@@ -7,6 +7,9 @@ import com.facebook.facebookclone.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RequiredArgsConstructor
 @RestController
 public class UserProfileController {
@@ -59,5 +62,10 @@ public class UserProfileController {
     @DeleteMapping("/user/userprofile/cover/{username}") // 사진 삭제
     public void deleteCover(@PathVariable String username) {
         userProfileService.deleteCover(username);
+    }
+
+    @GetMapping("/user/userprofile/pictureList/{username}") // 사진 목록
+    public Map<String, List<String>> getPictureList(@PathVariable String username) {
+        return userProfileService.getPictureList(username);
     }
 }

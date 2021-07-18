@@ -15,7 +15,7 @@ public class UserProfile {
     @Id
     private Long id;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String username;
 
     @Column(nullable = true)

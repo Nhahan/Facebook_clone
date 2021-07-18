@@ -19,8 +19,8 @@ public class ArticleController {
 
     @GetMapping("/user/article") // 게시글 조회
     public Page<Article> getArticle(
-            @RequestParam(value = "username", required = true) String username,
-            @RequestParam(value = "page", required = true) int page,
+            @RequestParam(value = "username") String username,
+            @RequestParam(value = "page") int page,
             @RequestParam(value = "size", required = false, defaultValue = "3") int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Article> articleList = articleRepository.findAllByOrderByCreatedAtDesc(pageable);

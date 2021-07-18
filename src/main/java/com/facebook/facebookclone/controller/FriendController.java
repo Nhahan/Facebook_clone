@@ -30,7 +30,7 @@ public class FriendController {
     }
 
     @GetMapping("/user/friendsRecommend") // 친추 추천 목록
-    public Map<String, List<String>> getFriendsRecommned() {
+    public Map<String, List<String>> getFriendsRecommend() {
         return friendService.getFriendsRecommend();
     }
 }
