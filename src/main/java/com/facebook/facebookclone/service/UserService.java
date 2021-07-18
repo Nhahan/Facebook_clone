@@ -1,6 +1,5 @@
 package com.facebook.facebookclone.service;
 
-
 import com.facebook.facebookclone.dto.SignupRequestDto;
 import com.facebook.facebookclone.model.User;
 import com.facebook.facebookclone.model.UserRole;

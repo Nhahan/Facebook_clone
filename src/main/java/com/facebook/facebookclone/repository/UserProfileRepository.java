@@ -2,6 +2,7 @@ package com.facebook.facebookclone.repository;
 
 import com.facebook.facebookclone.model.UserProfile;
 import com.facebook.facebookclone.repository.mapping.FriendObjectMappingFromUserProfile;
+import com.facebook.facebookclone.repository.mapping.UsernameMapping;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +16,5 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, Long> 
     List<FriendObjectMappingFromUserProfile> findAllByOrderByModifiedAtDesc();
     Page<FriendObjectMappingFromUserProfile> findAllByOrderByCreatedAtDesc(Pageable pageable);
     List<UserProfile> findAll();
-
     List<FriendObjectMappingFromUserProfile> findAllByUsernameContaining(String username);
 }
