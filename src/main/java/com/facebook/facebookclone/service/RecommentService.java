@@ -43,4 +43,9 @@ public class RecommentService {
         }
         return recommentList;
     }
+
+    @Transactional
+    public void deleteRecomment(String username, Long commentId) {
+        recommentRepository.deleteByUsernameAndCommentId(username, commentId);
+    }
 }

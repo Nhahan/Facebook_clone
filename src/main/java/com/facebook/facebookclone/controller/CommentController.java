@@ -34,6 +34,6 @@ public class CommentController {
 
     @DeleteMapping("/user/comment/{username}/{articleId}")
     public void deleteComment(@PathVariable String username, @PathVariable Long articleId) {
-        commentRepository.deleteByUsernameAndArticleId(username, articleId);
+        commentService.deleteComment(username, articleId);
     }
 }

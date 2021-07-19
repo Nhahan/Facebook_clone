@@ -17,11 +17,6 @@ public class UserProfileController {
     private final UserProfileService userProfileService;
     private final UserProfileRepository userProfileRepository;
 
-    @PostMapping("/user/userprofile/initialize/{username}") // 유저 프로필 초기 세팅
-    public void initializeUserProfile(@PathVariable String username) {
-        userProfileService.initializeUserProfile(username);
-    }
-
     @GetMapping("/user/userprofile/picture/{username}") // 프로필 사진 조회
     public String getPicture(@PathVariable String username) {
         UserProfile userProfile = userProfileRepository.findByUsername(username);

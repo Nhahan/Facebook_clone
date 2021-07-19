@@ -66,13 +66,4 @@ public class UserProfileService {
 
         return pictureListMap;
     }
-
-    @Transactional
-    public void initializeUserProfile(String username) {
-        if (userRepository.findByUsername(username).isPresent()) {
-            userProfileRepository.save(new UserProfile(username));
-        } else {
-            throw new NullPointerException(username + " 유저가 존재하지 않습니다.");
-        }
-    }
 }

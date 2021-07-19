@@ -32,8 +32,7 @@ public class ArticleController {
     }
 
     @PostMapping("/user/article")
-    public void createArticle(@RequestBody ArticleRequestDto requestDto) {
-        articleService.createArticle(requestDto);
+    public void createArticle(@RequestBody ArticleRequestDto requestDto) { articleService.createArticle(requestDto);
     }
 
     @PutMapping("/user/article/{articleId}")
@@ -43,6 +42,6 @@ public class ArticleController {
 
     @DeleteMapping("/user/article/{articleId}")
     public void deleteArticle(@PathVariable Long articleId) {
-        articleRepository.deleteById(articleId);
+        articleService.deleteArticle(articleId);
     }
 }

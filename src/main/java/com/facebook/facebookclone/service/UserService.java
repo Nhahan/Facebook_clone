@@ -2,7 +2,9 @@ package com.facebook.facebookclone.service;
 
 import com.facebook.facebookclone.dto.SignupRequestDto;
 import com.facebook.facebookclone.model.User;
+import com.facebook.facebookclone.model.UserProfile;
 import com.facebook.facebookclone.model.UserRole;
+import com.facebook.facebookclone.repository.UserProfileRepository;
 import com.facebook.facebookclone.repository.UserRepository;
 import com.facebook.facebookclone.security.kakao.KakaoOAuth2;
 import com.facebook.facebookclone.security.kakao.KakaoUserInfo;
@@ -21,14 +23,16 @@ import java.util.Optional;
 public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final UserProfileRepository userProfileRepository;
     private final KakaoOAuth2 kakaoOAuth2;
     private final AuthenticationManager authenticationManager;
     private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, KakaoOAuth2 kakaoOAuth2, AuthenticationManager authenticationManager) {
-        this.userRepository = userRepository;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserProfileRepository userProfileRepository, KakaoOAuth2 kakaoOAuth2, AuthenticationManager authenticationManager) {
         this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+        this.userProfileRepository = userProfileRepository;
         this.kakaoOAuth2 = kakaoOAuth2;
         this.authenticationManager = authenticationManager;
     }
@@ -56,6 +60,7 @@ public class UserService {
 
         User user = new User(username, password, emailAddress, role);
         userRepository.save(user);
+        userProfileRepository.save(new UserProfile(username)); // 유저프로필 생성
     }
 
     public void kakaoLogin(String authorizedCode) {

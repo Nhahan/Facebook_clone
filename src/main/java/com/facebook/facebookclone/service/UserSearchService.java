@@ -1,19 +1,20 @@
 package com.facebook.facebookclone.service;
 
+import com.facebook.facebookclone.model.UserProfile;
+import com.facebook.facebookclone.repository.FriendRequestRepository;
 import com.facebook.facebookclone.repository.UserProfileRepository;
 import com.facebook.facebookclone.repository.mapping.FriendObjectMappingFromUserProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
 public class UserSearchService {
 
     private final UserProfileRepository userProfileRepository;
+    private final FriendRequestRepository friendRequestRepository;
 
     public HashSet<String> getUsernameSet(String username) {
         HashSet<String> usernameSet = new HashSet<>();
@@ -21,8 +22,16 @@ public class UserSearchService {
         return usernameSet;
     }
 
-    public List<FriendObjectMappingFromUserProfile> getExactUsernameList(String username) {
-        return userProfileRepository.findAllByUsernameContaining(username);
+    public List<Map<String, Object>> getExactUsernameList(String username, String friendName) {
+        List<Map<String, Object>> userProfileMapList = new ArrayList<>();
+        for (FriendObjectMappingFromUserProfile friendObjectMappingFromUserProfile: userProfileRepository.findAllByUsernameContaining(friendName)) {
+            Map<String, Object> userProfileMap = new HashMap<>();
+            userProfileMap.put("username", friendObjectMappingFromUserProfile.getUsername());
+            userProfileMap.put("picture", friendObjectMappingFromUserProfile.getPicture());
+            userProfileMap.put("changeRequestFriendChecker", !friendRequestRepository.findAllByUsernameAndFriendName(username, friendObjectMappingFromUserProfile.getUsername()).isEmpty());
+            userProfileMapList.add(userProfileMap);
+        }
+        return userProfileMapList;
     }
 
     public List<String> getAllUsername() {

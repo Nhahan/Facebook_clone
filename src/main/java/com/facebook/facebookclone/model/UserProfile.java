@@ -1,10 +1,14 @@
 package com.facebook.facebookclone.model;
 
 import com.facebook.facebookclone.dto.UserProfileRequestDto;
+import com.facebook.facebookclone.repository.mapping.FriendObjectMappingFromUserProfile;
+import com.facebook.facebookclone.repository.mapping.UsernameMapping;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -23,12 +27,6 @@ public class UserProfile extends Timestamped {
 
     @Column(nullable = true)
     private String cover;
-
-    public UserProfile(UserProfileRequestDto requestDto) {
-        this.username = requestDto.getUsername();
-        this.picture = requestDto.getPicture();
-        this.cover = requestDto.getCover();
-    }
 
     public UserProfile(String username) {
         this.username = username;

@@ -1,17 +1,13 @@
 package com.facebook.facebookclone.controller;
 
 import com.facebook.facebookclone.dto.FriendRequestRequestDto;
+import com.facebook.facebookclone.model.FriendRequest;
 import com.facebook.facebookclone.repository.FriendRequestRepository;
 import com.facebook.facebookclone.repository.mapping.FriendObjectMappingFromUserProfile;
 import com.facebook.facebookclone.service.FriendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -49,9 +45,19 @@ public class FriendController {
         return friendService.requestFriend(requestDto);
     }
 
+    @GetMapping("/user/request-friend-list/{friendName}") // 친구 신청 목록 확인
+    public List<FriendRequest> getRequestFriendList(@PathVariable String friendName) {
+        return friendService.getRequestFriendList(friendName);
+    }
+
     @GetMapping("/user/request-friend/{username}/{friendName}") // 친구 신청 여부 확인
     public Map<String, Boolean> requestFriend(@PathVariable String username, @PathVariable String friendName) {
         return friendService.requestFriendChecker(username, friendName);
+    }
+
+    @DeleteMapping("/user/decline-friend/{username}/{friendName}")
+    public void declineFriend(@PathVariable String username, @PathVariable String friendName) {
+        friendService.declineFriend(username, friendName);
     }
 }
 

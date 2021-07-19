@@ -1,6 +1,5 @@
 package com.facebook.facebookclone.model;
 
-import com.facebook.facebookclone.dto.FriendRequestRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

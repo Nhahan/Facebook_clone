@@ -50,4 +50,8 @@ public class CommentService {
         return commentList;
     }
 
+    @Transactional
+    public void deleteComment(String username, Long articleId) {
+        commentRepository.deleteByUsernameAndArticleId(username, articleId);
+    }
 }

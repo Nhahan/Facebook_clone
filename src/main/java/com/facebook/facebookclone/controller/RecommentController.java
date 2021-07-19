@@ -34,6 +34,6 @@ public class RecommentController {
 
     @DeleteMapping("/user/recomment/{username}/{commentId}")
     public void deleteRecomment(@PathVariable String username, @PathVariable Long commentId) {
-        recommentRepository.deleteByUsernameAndCommentId(username, commentId);
+        recommentService.deleteRecomment(username, commentId);
     }
 }
