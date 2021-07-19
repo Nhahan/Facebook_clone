@@ -31,7 +31,7 @@ public class RealTimeNotificationController {
         realTimeNotificationRepository.deleteById(notificationId);
     }
 
-    @PostMapping("/user/notification") // 운영자 공지 사항
+    @PostMapping("/user/notification") // 운영자 알림 등록
     public void generateFullNotification(@RequestBody RealTimeNotificationRequestDto requestDto) {
         realTimeNotificationService.generateAdminNotification(requestDto);
     }

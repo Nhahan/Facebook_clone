@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface RealTimeNotificationRepository extends JpaRepository<RealTimeNotification, Long> {
     List<RealTimeNotification> findAllByOrderByCreatedAtDesc();
-    List<RealTimeNotification> findAllByUsernameByOrderByCreatedAtDesc(String username);
+    List<RealTimeNotification> findAllByUsernameOrderByCreatedAtDesc(String username);
+
 }

@@ -45,8 +45,8 @@ public class FriendController {
 
     // 친구 신청 API 목록
     @PostMapping("/user/request-friend") // 친구 신청
-    public void requestFriend(@RequestBody FriendRequestRequestDto requestDto) {
-        friendService.requestFriend(requestDto);
+    public Map<String, String> requestFriend(@RequestBody FriendRequestRequestDto requestDto) {
+        return friendService.requestFriend(requestDto);
     }
 
     @GetMapping("/user/request-friend/{username}/{friendName}") // 친구 신청 여부 확인

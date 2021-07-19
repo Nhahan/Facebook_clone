@@ -108,21 +108,28 @@ public class FriendService {
     }
 
     @Transactional
-    public void requestFriend(FriendRequestRequestDto requestDto) {
+    public Map<String, String> requestFriend(FriendRequestRequestDto requestDto) {
+        Map<String, String> requestFriendMsgMap = new HashMap<>();
         if (userRepository.findByUsername(requestDto.getUsername()).isPresent() && userRepository.findByUsername(requestDto.getFriendName()).isPresent()) {
             if (friendRequestRepository.findAllByUsernameAndFriendName(requestDto.getUsername(), requestDto.getFriendName()).isEmpty()) {
                 friendRequestRepository.save(new FriendRequest(requestDto.getUsername(), requestDto.getFriendName()));
+                requestFriendMsgMap.put("msg", "friend request " + requestDto.getUsername() + " to " + requestDto.getFriendName() + " has been completed.");
+                return requestFriendMsgMap;
             } else {
-                throw new IllegalArgumentException(requestDto.getUsername() + "&" + requestDto.getFriendName() + " -> 이미 신청 중인 친구입니다.");
+                requestFriendMsgMap.put("msg", "friend request " + requestDto.getUsername() + " to " + requestDto.getFriendName() + " is already in progress.");
+                return requestFriendMsgMap;
             }
         } else {
-            throw new NullPointerException("존재하지 않는 유저입니다.");
+            requestFriendMsgMap.put("msg", "Unregistered users.");
+            return requestFriendMsgMap;
+//            throw new NullPointerException("존재하지 않는 유저입니다.");
         }
     }
 
     public Map<String, Boolean> requestFriendChecker(String username, String friendName) {
         Map<String, Boolean> requestFriendCheckerMap = new HashMap<>();
-        requestFriendCheckerMap.put("requestChecker", !friendRequestRepository.findAllByUsernameAndFriendName(username, friendName).isEmpty());
+        requestFriendCheckerMap.put("friend request " + username + " to " + friendName, !friendRequestRepository.findAllByUsernameAndFriendName(username, friendName).isEmpty());
+        requestFriendCheckerMap.put("friend request " + friendName + " to " + username, !friendRequestRepository.findAllByUsernameAndFriendName(friendName, username).isEmpty());
         return requestFriendCheckerMap;
     }
 }

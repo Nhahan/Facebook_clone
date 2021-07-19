@@ -7,7 +7,6 @@ import com.facebook.facebookclone.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -63,6 +62,6 @@ public class RealTimeNotificationService {
     }
 
     public List<RealTimeNotification> sendSpecificNotification(String username) {
-        return realTimeNotificationRepository.findAllByUsernameByOrderByCreatedAtDesc(username);
+        return realTimeNotificationRepository.findAllByUsernameOrderByCreatedAtDesc(username);
     }
 }
