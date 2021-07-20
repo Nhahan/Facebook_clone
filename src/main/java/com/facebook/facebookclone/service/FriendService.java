@@ -3,6 +3,7 @@ package com.facebook.facebookclone.service;
 import com.facebook.facebookclone.dto.FriendRequestRequestDto;
 import com.facebook.facebookclone.model.Friend;
 import com.facebook.facebookclone.model.FriendRequest;
+import com.facebook.facebookclone.model.UserProfile;
 import com.facebook.facebookclone.repository.FriendRepository;
 import com.facebook.facebookclone.repository.FriendRequestRepository;
 import com.facebook.facebookclone.repository.UserProfileRepository;
@@ -36,8 +37,8 @@ public class FriendService {
                 if (friendRepository.findAllByUsernameAndFriendName(requestDto.getFriendName(), requestDto.getUsername()).isEmpty()) {
                     friendRepository.save(new Friend(requestDto.getFriendName(), requestDto.getUsername()));
                 }
-            friendRequestRepository.deleteByUsernameAndFriendName(requestDto.getUsername(), requestDto.getFriendName());
-            friendRequestRepository.deleteByUsernameAndFriendName(requestDto.getFriendName(), requestDto.getUsername());
+                friendRequestRepository.deleteByUsernameAndFriendName(requestDto.getUsername(), requestDto.getFriendName());
+                friendRequestRepository.deleteByUsernameAndFriendName(requestDto.getFriendName(), requestDto.getUsername());
             }
         }
     }
@@ -75,17 +76,22 @@ public class FriendService {
         }
     }
 
-    public Map<String, List<FriendObjectMappingFromUserProfile>> getFriendsRecommend() {
+    public Map<String, List<FriendObjectMappingFromUserProfile>> getFriendsRecommend(String username) {
         Map<String, List<FriendObjectMappingFromUserProfile>> friendsRecommendListMap = new HashMap<>();
         List<FriendObjectMappingFromUserProfile> friendsRecommendList = new ArrayList<>();
         HashSet<Integer> pageSet = new HashSet<>();
 
         Random random = new Random();
 
-        long dataSize = userProfileRepository.count();
+        long dataSize = userProfileRepository.count() - 1; // 자신 제외
 
         if (dataSize <= 12) { // 서비스가 너무 작을 때
             friendsRecommendList = userProfileRepository.findAllByOrderByModifiedAtDesc();
+            for (FriendObjectMappingFromUserProfile userProfile : userProfileRepository.findAllByOrderByModifiedAtDesc()) {
+                if (!username.equals(userProfile.getUsername())) {
+                    friendsRecommendList.add(userProfile); // 자신 제외
+                }
+            }
             Collections.shuffle(friendsRecommendList);
             friendsRecommendListMap.put("recommendFriends", friendsRecommendList);
             return friendsRecommendListMap;
@@ -104,7 +110,13 @@ public class FriendService {
             userProfileRepository.findAllByOrderByCreatedAtDesc(pageable).forEach(friendsRecommendList::add);
         }
         Collections.shuffle(friendsRecommendList);
-        friendsRecommendListMap.put("recommendFriends", friendsRecommendList);
+        List<FriendObjectMappingFromUserProfile> finalList = new ArrayList<>();
+        for (FriendObjectMappingFromUserProfile finalUserProfile : friendsRecommendList) {
+            if (!username.equals(finalUserProfile.getUsername())) {
+                finalList.add(finalUserProfile); // 자신 제외
+            }
+        }
+        friendsRecommendListMap.put("recommendFriends", finalList);
         return friendsRecommendListMap;
     }
 

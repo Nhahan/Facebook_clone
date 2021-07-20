@@ -31,9 +31,9 @@ public class FriendController {
         friendService.deleteFriend(friendName, username);
     }
 
-    @GetMapping("/user/friends-recommend") // 친추 추천 목록
-    public Map<String, List<FriendObjectMappingFromUserProfile>> getFriendsRecommend() {
-        return friendService.getFriendsRecommend();
+    @GetMapping("/user/friends-recommend/{username}") // 친추 추천 목록
+    public Map<String, List<FriendObjectMappingFromUserProfile>> getFriendsRecommend(@PathVariable String username) {
+        return friendService.getFriendsRecommend(username);
     }
 
     // 친구 신청 API 목록
