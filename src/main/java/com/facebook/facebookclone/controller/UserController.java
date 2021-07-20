@@ -2,6 +2,7 @@ package com.facebook.facebookclone.controller;
 
 import com.facebook.facebookclone.dto.SignupRequestDto;
 import com.facebook.facebookclone.model.User;
+import com.facebook.facebookclone.repository.UserProfileRepository;
 import com.facebook.facebookclone.repository.UserRepository;
 import com.facebook.facebookclone.security.JwtTokenProvider;
 import com.facebook.facebookclone.service.UserService;
@@ -21,6 +22,7 @@ public class UserController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
     private final UserRepository userRepository;
+    private final UserProfileRepository userProfileRepository;
 
     // 회원 가입 요청 처리
     @PostMapping("/user/signup")
@@ -35,6 +37,6 @@ public class UserController {
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
-        return jwtTokenProvider.createToken(user.getUsername(), user.getRole());
+        return jwtTokenProvider.createToken(userProfileRepository.findByUsername(user.getUsername()), user.getRole());
     }
 }

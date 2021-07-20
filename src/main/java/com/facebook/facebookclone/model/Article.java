@@ -35,6 +35,9 @@ public class Article extends Timestamped {
     private String video;
 
     @Transient
+    private String usernamePicture;
+
+    @Transient
     private Long commentCount;
 
     @Transient
@@ -45,6 +48,10 @@ public class Article extends Timestamped {
 
     @Transient
     private final List<String> articleLikeItUserList = new ArrayList<>();
+
+    public void addUsernamePicture(String picture) {
+        this.usernamePicture = picture;
+    }
 
     public void addCommentCount(Long count) {
         this.commentCount = count;

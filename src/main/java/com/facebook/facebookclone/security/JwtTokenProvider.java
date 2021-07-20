@@ -1,6 +1,7 @@
 package com.facebook.facebookclone.security;
 
 
+import com.facebook.facebookclone.model.UserProfile;
 import com.facebook.facebookclone.model.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -35,8 +36,8 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성
-    public String createToken(String userPk, UserRole roles) {
-        Claims claims = Jwts.claims().setSubject(userPk);
+    public String createToken(UserProfile userProfileIncludeUserPk, UserRole roles) {
+        Claims claims = Jwts.claims().setSubject(userProfileIncludeUserPk.getUsername());
         // claim : JWT payload 에 저장되는 정보단위
         claims.put("roles", roles); // 정보는 key / value 쌍으로 저장
         Date now = new Date();

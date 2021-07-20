@@ -3,7 +3,6 @@ package com.facebook.facebookclone.model;
 import com.facebook.facebookclone.dto.CommentRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
