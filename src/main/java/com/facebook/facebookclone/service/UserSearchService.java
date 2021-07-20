@@ -20,7 +20,7 @@ public class UserSearchService {
     public HashSet<String> getUsernameSet(String username, String friendName) {
         HashSet<String> usernameSet = new HashSet<>();
         for (FriendObjectMappingFromUserProfile userProfile : userProfileRepository.findAllByUsernameContaining(friendName)) {
-            if (friendRepository.findAllByUsernameAndFriendName(username, userProfile.getUsername()).isEmpty()) { // 친구 목록에 없으면 검색결과에 반영
+            if (friendRepository.findAllByUsernameAndFriendName(username, userProfile.getUsername()).isEmpty() && !username.equals(userProfile.getUsername())) { // 친구 목록에 없으면 검색결과에 반영 & username 제외
                 usernameSet.add(userProfile.getUsername().replaceAll("[0-9]", ""));
             }
         }
@@ -30,7 +30,7 @@ public class UserSearchService {
     public List<Map<String, Object>> getExactUsernameList(String username, String friendName) {
         List<Map<String, Object>> userProfileMapList = new ArrayList<>();
         for (FriendObjectMappingFromUserProfile friendObjectMappingFromUserProfile : userProfileRepository.findAllByUsernameContaining(friendName)) {
-            if (friendRepository.findAllByUsernameAndFriendName(username, friendObjectMappingFromUserProfile.getUsername()).isEmpty()) { // 친구 목록에 없으면 검색결과에 반영
+            if (friendRepository.findAllByUsernameAndFriendName(username, friendObjectMappingFromUserProfile.getUsername()).isEmpty() && !username.equals(friendObjectMappingFromUserProfile.getUsername())) { // 친구 목록에 없으면 검색결과에 반영 & username 제외
                 Map<String, Object> userProfileMap = new HashMap<>();
                 userProfileMap.put("username", friendObjectMappingFromUserProfile.getUsername());
                 userProfileMap.put("picture", friendObjectMappingFromUserProfile.getPicture());

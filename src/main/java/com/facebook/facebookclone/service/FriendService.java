@@ -110,24 +110,25 @@ public class FriendService {
 
     @Transactional
     public Map<String, String> requestFriend(FriendRequestRequestDto requestDto) {
+        if (requestDto.getUsername().equals(requestDto.getFriendName())) {
+            throw new IllegalArgumentException("자신에게 친구신청을 할 수 없습니다.");
+        }
         Map<String, String> requestFriendMsgMap = new HashMap<>();
         if (userRepository.findByUsername(requestDto.getUsername()).isPresent() && userRepository.findByUsername(requestDto.getFriendName()).isPresent()) {
             if (friendRequestRepository.findAllByUsernameAndFriendName(requestDto.getUsername(), requestDto.getFriendName()).isEmpty()) {
                 friendRequestRepository.save(new FriendRequest(requestDto.getUsername(), requestDto.getFriendName()));
                 requestFriendMsgMap.put("code", "200");
                 requestFriendMsgMap.put("msg", "friend request " + requestDto.getUsername() + " to " + requestDto.getFriendName() + " has been completed.");
-                return requestFriendMsgMap;
             } else {
                 requestFriendMsgMap.put("code", "209");
                 requestFriendMsgMap.put("msg", "friend request " + requestDto.getUsername() + " to " + requestDto.getFriendName() + " is already in progress.");
-                return requestFriendMsgMap;
             }
         } else {
             requestFriendMsgMap.put("code", "500");
             requestFriendMsgMap.put("msg", "Unregistered users.");
-            return requestFriendMsgMap;
-//            throw new NullPointerException("존재하지 않는 유저입니다.");
+            //            throw new NullPointerException("존재하지 않는 유저입니다.");
         }
+        return requestFriendMsgMap;
     }
 
     public Map<String, Boolean> requestFriendChecker(String username, String friendName) {
