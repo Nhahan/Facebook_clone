@@ -1,5 +1,6 @@
 package com.facebook.facebookclone.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,11 +12,8 @@ import javax.persistence.*;
 public class TestComment extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "tcomment_id")
+    @Column(name = "tcommentId")
     private Long id;
-
-    @Column(nullable = false)
-    private Long articleId;
 
     @Column(nullable = false)
     private String username;
@@ -23,12 +21,13 @@ public class TestComment extends Timestamped {
     @Column(nullable = false)
     private String content;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "tarticle_Id")
+    @ManyToOne
+    @JsonManagedReference
+    @JoinColumn(name = "tarticle_id")
     private TestArticle testArticle;
 
-    public TestComment(Long articleId) {
-        this.articleId = articleId;
+    public TestComment(TestArticle testArticle) {
+        this.testArticle = testArticle;
         this.username = "testUsername";
         this.content = "testContent";
     }

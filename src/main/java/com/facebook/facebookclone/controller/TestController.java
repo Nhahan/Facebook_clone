@@ -42,9 +42,10 @@ public class TestController {
         return commentRepository.findAll();
     }
 
-    @PostMapping("/test/comment/{articleId}")
-    public void createTestComment(@PathVariable Long articleId) {
-        TestComment comment = new TestComment(articleId);
+    @PostMapping("/test/comment/{id}")
+    public void createTestComment(@PathVariable Long id) {
+        TestArticle article = articleRepository.getFirstById(id);
+        TestComment comment = new TestComment(article);
         commentRepository.save(comment);
     }
 }

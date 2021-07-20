@@ -20,19 +20,25 @@ public class ArticleController {
     @GetMapping("/user/all-article/{username}/{page}/{size}") // 전체 게시글 조회 with size
     public Page<Article> getAllArticleWithSize(@PathVariable String username, @PathVariable int page, @PathVariable int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Article> articleList = articleRepository.findAllByOrderByCreatedAtDesc(pageable);
+        Page<Article> articleList = articleRepository.findAllByOrderByCreatedAtAsc(pageable);
         return articleService.getPagedArticleList(articleList, username);
     }
 
     @GetMapping("/user/my-article/{username}/{page}/{size}") // username의 전체 게시글 조회 with size
     public Page<Article> getArticleWithSize(@PathVariable String username, @PathVariable int page, @PathVariable int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Article> articleList = articleRepository.findAllByUsernameOrderByCreatedAtDesc(username, pageable);
+        Page<Article> articleList = articleRepository.findAllByUsernameOrderByCreatedAtAsc(username, pageable);
         return articleService.getPagedArticleList(articleList, username);
     }
 
+    @GetMapping("/user/article/{articleId}")
+    public Article getArticleByArticleId(@PathVariable Long articleId) {
+        return articleService.getArticleByArticleId(articleId);
+    }
+
     @PostMapping("/user/article")
-    public void createArticle(@RequestBody ArticleRequestDto requestDto) { articleService.createArticle(requestDto);
+    public void createArticle(@RequestBody ArticleRequestDto requestDto) {
+        articleService.createArticle(requestDto);
     }
 
     @PutMapping("/user/article/{articleId}")

@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +42,7 @@ public class ArticleService {
             Long articleId = value.getId();
             List<Comment> commentList = commentRepository.findAllByArticleId(articleId);
             Long recommentCount = 0L;
-            String usernamePicture = userProfileRepository.getByUsername(username).getPicture();
+            String usernamePicture = userProfileRepository.findByUsername(value.getUsername()).getPicture();
 
             for (Comment comment : commentList) { // 대댓글 갯수
                 recommentCount += recommentRepository.countByCommentId(comment.getId());
@@ -78,5 +77,9 @@ public class ArticleService {
             recommentRepository.deleteByCommentId(commentId);
         }
         commentRepository.deleteAllByArticleId(articleId);
+    }
+
+    public Article getArticleByArticleId(Long articleId) {
+        return articleRepository.findById(articleId).orElseThrow(() -> new NullPointerException("존재하지 않는 articleId"));
     }
 }
