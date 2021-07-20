@@ -3,6 +3,7 @@ package com.facebook.facebookclone.service;
 import com.facebook.facebookclone.dto.CommentRequestDto;
 import com.facebook.facebookclone.model.Comment;
 import com.facebook.facebookclone.model.CommentLikeIt;
+import com.facebook.facebookclone.model.Recomment;
 import com.facebook.facebookclone.repository.CommentLikeItRepository;
 import com.facebook.facebookclone.repository.CommentRepository;
 import com.facebook.facebookclone.repository.RecommentRepository;

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -136,12 +137,31 @@ public class FriendService {
         return requestFriendCheckerMap;
     }
 
-    public List<FriendRequest> getRequestFriendList(String friendName) {
-        return friendRequestRepository.findAllByFriendName(friendName);
+    public List<FriendObjectMappingFromUserProfile> getReceivedRequestFriendList(String username) {
+        List<FriendObjectMappingFromUserProfile> friendProfileList = new ArrayList<>();
+        for (FriendRequest friendRequest : friendRequestRepository.findAllByFriendName(username)) {
+            String requestName = friendRequest.getUsername();
+            friendProfileList.add(userProfileRepository.getByUsername(requestName));
+        }
+        return friendProfileList;
+    }
+
+    public List<FriendObjectMappingFromUserProfile> getGivenRequestFriendList(String username) {
+        List<FriendObjectMappingFromUserProfile> friendProfileList = new ArrayList<>();
+        for (FriendRequest friendRequest : friendRequestRepository.findAllByUsername(username)) {
+            String friendName = friendRequest.getFriendName();
+            friendProfileList.add(userProfileRepository.getByUsername(friendName));
+        }
+        return friendProfileList;
     }
 
     @Transactional
-    public void declineFriend(String username, String friendName) {
+    public void declineReceivedFriend(String username, String friendName) {
+        friendRequestRepository.deleteByUsernameAndFriendName(friendName, username);
+    }
+
+    @Transactional
+    public void declineGivenFriend(String username, String friendName) {
         friendRequestRepository.deleteByUsernameAndFriendName(username, friendName);
     }
 }

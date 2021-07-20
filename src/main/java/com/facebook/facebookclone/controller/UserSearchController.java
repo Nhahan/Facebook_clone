@@ -1,7 +1,5 @@
 package com.facebook.facebookclone.controller;
 
-import com.facebook.facebookclone.model.UserProfile;
-import com.facebook.facebookclone.repository.mapping.FriendObjectMappingFromUserProfile;
 import com.facebook.facebookclone.service.UserSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +16,9 @@ public class UserSearchController {
 
     private final UserSearchService userSearchService;
 
-    @GetMapping("/user/search/contain-list/{username}") // 중복 이름 하나만
-    public HashSet<String> nameContainList(@PathVariable String username) {
-        return userSearchService.getUsernameSet(username);
+    @GetMapping("/user/search/contain-list/{username}/{friendName}") // 중복 이름 하나만
+    public HashSet<String> nameContainList(@PathVariable String username, @PathVariable String friendName) {
+        return userSearchService.getUsernameSet(username, friendName);
     }
 
     @GetMapping("/user/search/exact-list/{username}/{friendName}") // 중복 이름 모두

@@ -17,14 +17,21 @@ public class ArticleController {
     private final ArticleRepository articleRepository;
     private final ArticleService articleService;
 
-    @GetMapping("/user/article/{username}/{page}/{size}") // 게시글 조회 with size
-    public Page<Article> getArticleWithSize(@PathVariable String username, @PathVariable int page, @PathVariable(required = false) int size) {
+    @GetMapping("/user/all-article/{username}/{page}/{size}") // 전체 게시글 조회 with size
+    public Page<Article> getAllArticleWithSize(@PathVariable String username, @PathVariable int page, @PathVariable(required = false) int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Article> articleList = articleRepository.findAllByOrderByCreatedAtDesc(pageable);
         return articleService.getPagedArticleList(articleList, username);
     }
 
-    @GetMapping("/user/article/{username}/{page}") // 게시글 조회 without size // 위와 합치려고 했는데 실패해서 따로 작성
+    @GetMapping("/user/my-article/{username}/{page}/{size}") // username의 전체 게시글 조회 with size
+    public Page<Article> getArticleWithSize(@PathVariable String username, @PathVariable int page, @PathVariable(required = false) int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Article> articleList = articleRepository.findAllByUsernameOrderByCreatedAtDesc(username, pageable);
+        return articleService.getPagedArticleList(articleList, username);
+    }
+
+    @GetMapping("/user/article/{username}/{page}") // username의 게시글 조회 without size // 위와 합치려고 했는데 실패해서 따로 작성
     public Page<Article> getArticleWithoutSize(@PathVariable String username, @PathVariable int page) {
         Pageable pageable = PageRequest.of(page - 1, 3);
         Page<Article> articleList = articleRepository.findAllByOrderByCreatedAtDesc(pageable);

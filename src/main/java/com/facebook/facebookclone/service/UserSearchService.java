@@ -1,6 +1,6 @@
 package com.facebook.facebookclone.service;
 
-import com.facebook.facebookclone.model.UserProfile;
+import com.facebook.facebookclone.repository.FriendRepository;
 import com.facebook.facebookclone.repository.FriendRequestRepository;
 import com.facebook.facebookclone.repository.UserProfileRepository;
 import com.facebook.facebookclone.repository.mapping.FriendObjectMappingFromUserProfile;
@@ -14,22 +14,29 @@ import java.util.*;
 public class UserSearchService {
 
     private final UserProfileRepository userProfileRepository;
+    private final FriendRepository friendRepository;
     private final FriendRequestRepository friendRequestRepository;
 
-    public HashSet<String> getUsernameSet(String username) {
+    public HashSet<String> getUsernameSet(String username, String friendName) {
         HashSet<String> usernameSet = new HashSet<>();
-        userProfileRepository.findAllByUsernameContaining(username).forEach(s -> usernameSet.add(s.getUsername().replaceAll("[0-9]", "")));
+        for (FriendObjectMappingFromUserProfile userProfile : userProfileRepository.findAllByUsernameContaining(friendName)) {
+            if (friendRepository.findAllByUsernameAndFriendName(username, userProfile.getUsername()).isEmpty()) { // 친구 목록에 없으면 검색결과에 반영
+                usernameSet.add(userProfile.getUsername().replaceAll("[0-9]", ""));
+            }
+        }
         return usernameSet;
     }
 
     public List<Map<String, Object>> getExactUsernameList(String username, String friendName) {
         List<Map<String, Object>> userProfileMapList = new ArrayList<>();
-        for (FriendObjectMappingFromUserProfile friendObjectMappingFromUserProfile: userProfileRepository.findAllByUsernameContaining(friendName)) {
-            Map<String, Object> userProfileMap = new HashMap<>();
-            userProfileMap.put("username", friendObjectMappingFromUserProfile.getUsername());
-            userProfileMap.put("picture", friendObjectMappingFromUserProfile.getPicture());
-            userProfileMap.put("changeRequestFriendChecker", !friendRequestRepository.findAllByUsernameAndFriendName(username, friendObjectMappingFromUserProfile.getUsername()).isEmpty());
-            userProfileMapList.add(userProfileMap);
+        for (FriendObjectMappingFromUserProfile friendObjectMappingFromUserProfile : userProfileRepository.findAllByUsernameContaining(friendName)) {
+            if (friendRepository.findAllByUsernameAndFriendName(username, friendObjectMappingFromUserProfile.getUsername()).isEmpty()) { // 친구 목록에 없으면 검색결과에 반영
+                Map<String, Object> userProfileMap = new HashMap<>();
+                userProfileMap.put("username", friendObjectMappingFromUserProfile.getUsername());
+                userProfileMap.put("picture", friendObjectMappingFromUserProfile.getPicture());
+                userProfileMap.put("changeRequestFriendChecker", !friendRequestRepository.findAllByUsernameAndFriendName(username, friendObjectMappingFromUserProfile.getUsername()).isEmpty());
+                userProfileMapList.add(userProfileMap);
+            }
         }
         return userProfileMapList;
     }

@@ -9,4 +9,5 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
     List<FriendRequest> findAllByUsernameAndFriendName(String username, String friendName);
     List<FriendRequest> findAllByFriendName(String friendName);
     void deleteByUsernameAndFriendName(String username, String friendName);
+    List<FriendRequest> findAllByUsername(String username);
 }
