@@ -31,13 +31,6 @@ public class ArticleController {
         return articleService.getPagedArticleList(articleList, username);
     }
 
-    @GetMapping("/user/article/{username}/{page}") // username의 게시글 조회 without size // 위와 합치려고 했는데 실패해서 따로 작성
-    public Page<Article> getArticleWithoutSize(@PathVariable String username, @PathVariable int page) {
-        Pageable pageable = PageRequest.of(page - 1, 3);
-        Page<Article> articleList = articleRepository.findAllByOrderByCreatedAtDesc(pageable);
-        return articleService.getPagedArticleList(articleList, username);
-    }
-
     @PostMapping("/user/article")
     public void createArticle(@RequestBody ArticleRequestDto requestDto) { articleService.createArticle(requestDto);
     }
