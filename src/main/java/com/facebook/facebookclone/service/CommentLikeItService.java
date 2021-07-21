@@ -3,7 +3,6 @@ package com.facebook.facebookclone.service;
 import com.facebook.facebookclone.dto.CommentLikeItRequestDto;
 import com.facebook.facebookclone.model.Comment;
 import com.facebook.facebookclone.model.CommentLikeIt;
-import com.facebook.facebookclone.model.RealTimeCommentNotification;
 import com.facebook.facebookclone.repository.CommentLikeItRepository;
 import com.facebook.facebookclone.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ public class CommentLikeItService {
 
     private final CommentLikeItRepository commentLikeItRepository;
     private final CommentRepository commentRepository;
-    private final RealTimeNotificationService realTimeNotificationService;
 
     @Transactional
     public Map<String, Boolean> commentILikeIt(CommentLikeItRequestDto requestDto) {
@@ -36,14 +34,14 @@ public class CommentLikeItService {
                 commentLikeItMap.put("commentLikeIt", true);
             }
 
-            // generateNotification
-            String recipient = comment.getUsername(); // 알림 받을 username
-            String teller = requestDto.getUsername(); // 알림 주는 username
-            Long commentIdOnNotification = requestDto.getCommentId(); // 알림 게시글Id
-            if (!recipient.equals(teller)) { // 자기가 자기꺼 누르면 알림 생성하지 않음
-                realTimeNotificationService.generateNotification_commentLikeIt(new RealTimeCommentNotification(recipient, teller, commentIdOnNotification));
-            }
-            //
+//            // generateNotification
+//            String recipient = comment.getUsername(); // 알림 받을 username
+//            String teller = requestDto.getUsername(); // 알림 주는 username
+//            Long commentIdOnNotification = requestDto.getCommentId(); // 알림 게시글Id
+//            if (!recipient.equals(teller)) { // 자기가 자기꺼 누르면 알림 생성하지 않음
+//                realTimeNotificationService.generateNotification_commentLikeIt(new RealTimeCommentNotification(recipient, teller, commentIdOnNotification));
+//            }
+//            //
 
         } else {
             throw new NullPointerException("Id가 " + requestDto.getCommentId() + "인 댓글이 존재하지 않습니다");

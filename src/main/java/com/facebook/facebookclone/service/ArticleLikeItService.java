@@ -3,7 +3,6 @@ package com.facebook.facebookclone.service;
 import com.facebook.facebookclone.dto.ArticleLikeItRequestDto;
 import com.facebook.facebookclone.model.Article;
 import com.facebook.facebookclone.model.ArticleLikeIt;
-import com.facebook.facebookclone.model.RealTimeArticleNotification;
 import com.facebook.facebookclone.repository.ArticleLikeItRepository;
 import com.facebook.facebookclone.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ public class ArticleLikeItService {
 
     private final ArticleLikeItRepository articleLikeItRepository;
     private final ArticleRepository articleRepository;
-    private final RealTimeNotificationService realTimeNotificationService;
 
     @Transactional
     public Map<String, Boolean> articleLikeIt(ArticleLikeItRequestDto requestDto) {
@@ -37,14 +35,14 @@ public class ArticleLikeItService {
                 articleLikeItMap.put("articleLikeIt", true);
             }
 
-            // generateNotification
-            String recipient = article.getUsername(); // 알림 받을 username
-            String teller = requestDto.getUsername(); // 알림 주는 username
-            Long notificationArticleId = requestDto.getArticleId(); // 알림 게시글Id
-            if (!recipient.equals(teller)) { // 자기가 자기꺼 누르면 알림 생성하지 않음
-                realTimeNotificationService.generateNotification_articleLikeIt(new RealTimeArticleNotification(recipient, teller, notificationArticleId));
-            }
-            //
+//            // generateNotification
+//            String recipient = article.getUsername(); // 알림 받을 username
+//            String teller = requestDto.getUsername(); // 알림 주는 username
+//            Long notificationArticleId = requestDto.getArticleId(); // 알림 게시글Id
+//            if (!recipient.equals(teller)) { // 자기가 자기꺼 누르면 알림 생성하지 않음
+//                realTimeNotificationService.generateNotification_articleLikeIt(new RealTimeArticleNotification(recipient, teller, notificationArticleId));
+//            }
+//            //
 
         } else {
             throw new NullPointerException("Id가 " + requestDto.getArticleId() + "인 게시글이 존재하지 않습니다");

@@ -18,7 +18,6 @@ public class RecommentLikeItService {
 
     private final RecommentLikeItRepository recommentLikeItRepository;
     private final RecommentRepository recommentRepository;
-    private final RealTimeNotificationService realTimeNotificationService;
 
     @Transactional
     public Map<String, Boolean> recommentILikeIt(RecommentLikeItRequestDto requestDto) {
@@ -34,14 +33,14 @@ public class RecommentLikeItService {
                 recommentLikeItMap.put("commentLikeIt", true);
             }
 
-            // generateNotification
-            String recipient = recomment.getUsername(); // 알림 받을 username
-            String teller = requestDto.getUsername(); // 알림 주는 username
-            Long commentIdOnNotification = requestDto.getRecommentId(); // 알림 게시글Id
-            if (!recipient.equals(teller)) { // 자기가 자기꺼 누르면 알림 생성하지 않음
-                realTimeNotificationService.generateNotification_recommentLikeIt(new RealTimeRecommentNotification(recipient, teller, commentIdOnNotification));
-            }
-            //
+//            // generateNotification
+//            String recipient = recomment.getUsername(); // 알림 받을 username
+//            String teller = requestDto.getUsername(); // 알림 주는 username
+//            Long commentIdOnNotification = requestDto.getRecommentId(); // 알림 게시글Id
+//            if (!recipient.equals(teller)) { // 자기가 자기꺼 누르면 알림 생성하지 않음
+//                realTimeNotificationService.generateNotification_recommentLikeIt(new RealTimeRecommentNotification(recipient, teller, commentIdOnNotification));
+//            }
+//            //
 
         } else {
             throw new NullPointerException("Id가 " + requestDto.getRecommentId() + "인 댓글이 존재하지 않습니다");
