@@ -30,9 +30,9 @@ public class TestController {
         return articleRepository.findById(articleId).orElseThrow(() -> new NullPointerException("없는 id"));
     }
 
-    @PostMapping("/test/article/{username}")
-    public void createTestArticle(@PathVariable String username) {
-        TestArticle article = new TestArticle(username);
+    @PostMapping("/test/article")
+    public void createTestArticle() {
+        TestArticle article = new TestArticle();
         articleRepository.save(article);
     }
 
@@ -42,10 +42,9 @@ public class TestController {
         return commentRepository.findAll();
     }
 
-    @PostMapping("/test/comment/{id}")
-    public void createTestComment(@PathVariable Long id) {
-        TestArticle article = articleRepository.getFirstById(id);
-        TestComment comment = new TestComment(article);
+    @PostMapping("/test/comment")
+    public void createTestComment() {
+        TestComment comment = new TestComment();
         commentRepository.save(comment);
     }
 }
