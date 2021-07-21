@@ -34,25 +34,25 @@ public class UserProfileService {
 
     @Transactional
     public void putPicture(UserProfileRequestDto requestDto) {
-        UserProfile userProfile = userProfileRepository.findByUsername(requestDto.getUsername());
+        UserProfile userProfile = userProfileRepository.findByUsername(requestDto.getUsername()).orElseThrow(() -> new NullPointerException("등록되지 않은 username"));
         userProfile.pictureUpdate(requestDto.getPicture());
     }
 
     @Transactional
     public void putCover(UserProfileRequestDto requestDto) {
-        UserProfile userProfile = userProfileRepository.findByUsername(requestDto.getUsername());
+        UserProfile userProfile = userProfileRepository.findByUsername(requestDto.getUsername()).orElseThrow(() -> new NullPointerException("등록되지 않은 username"));
         userProfile.coverUpdate(requestDto.getCover());
     }
 
     @Transactional
     public void deletePicture(String username) {
-        UserProfile userProfile = userProfileRepository.findByUsername(username);
+        UserProfile userProfile = userProfileRepository.findByUsername(username).orElseThrow(() -> new NullPointerException("등록되지 않은 username"));
         userProfile.pictureUpdate("");
     }
 
     @Transactional
     public void deleteCover(String username) {
-        UserProfile userProfile = userProfileRepository.findByUsername(username);
+        UserProfile userProfile = userProfileRepository.findByUsername(username).orElseThrow(() -> new NullPointerException("등록되지 않은 username"));
         userProfile.coverUpdate("");
     }
 

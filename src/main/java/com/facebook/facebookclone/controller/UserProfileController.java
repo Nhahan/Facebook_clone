@@ -19,16 +19,15 @@ public class UserProfileController {
 
     @GetMapping("/user/userprofile/picture/{username}") // 프로필 사진 조회
     public String getPicture(@PathVariable String username) {
-        UserProfile userProfile = userProfileRepository.findByUsername(username);
+        UserProfile userProfile = userProfileRepository.findByUsername(username).orElseThrow(() -> new NullPointerException("등록되지 않은 username"));
         return userProfile.getPicture();
     }
 
     @GetMapping("/user/userprofile/cover/{username}") // 커버 조회
     public String getCover(@PathVariable String username) {
-        UserProfile userProfile = userProfileRepository.findByUsername(username);
+        UserProfile userProfile = userProfileRepository.findByUsername(username).orElseThrow(() -> new NullPointerException("등록되지 않은 username"));
         return userProfile.getCover();
     }
-
 
     @PutMapping("/user/userprofile/picture") // 프로필 사진 수정
     public void uploadPicture(@RequestBody UserProfileRequestDto requestDto) {

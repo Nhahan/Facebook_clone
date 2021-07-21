@@ -42,8 +42,10 @@ public class ArticleService {
             Long articleId = value.getId();
             List<Comment> commentList = commentRepository.findAllByArticleId(articleId);
             Long recommentCount = 0L;
-            String usernamePicture = userProfileRepository.findByUsername(value.getUsername()).getPicture();
-
+            String usernamePicture = "";
+            if (userProfileRepository.findByUsername(value.getUsername()).isPresent()) {
+                usernamePicture = userProfileRepository.findByUsername(value.getUsername()).get().getPicture();
+            }
             for (Comment comment : commentList) { // 대댓글 갯수
                 recommentCount += recommentRepository.countByCommentId(comment.getId());
             }
@@ -53,13 +55,13 @@ public class ArticleService {
 
             // 댓글 갯수
             Long commentCount = commentRepository.countByArticleId(articleId);
-            
+
             // 좋아요 갯수
             Long likesCount = articleLikeItRepository.countByArticleId(articleId);
 
             value.addCommentCount(commentCount + recommentCount);
             value.addLikeItCount(likesCount);
-            
+
             // username의 좋아요 여부
             Optional<ArticleLikeIt> didUsernameLikeIt = Optional.ofNullable(articleLikeItRepository.findByUsernameAndArticleId(username, articleId));
             value.changeLikeItChecker(didUsernameLikeIt.isPresent());

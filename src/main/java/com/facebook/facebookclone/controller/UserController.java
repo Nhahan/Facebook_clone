@@ -37,6 +37,6 @@ public class UserController {
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
-        return jwtTokenProvider.createToken(userProfileRepository.findByUsername(user.getUsername()), user.getRole());
+        return jwtTokenProvider.createToken(userProfileRepository.findByUsername(user.getUsername()).get(), user.getRole());
     }
 }
