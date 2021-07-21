@@ -37,7 +37,7 @@ public class ArticleController {
         return articleService.getPagedArticleList(articleList, username);
     }
 
-    @GetMapping("/user/article/{articleId}")
+    @GetMapping("/user/article/{articleId}") // 특정 게시글 불러오기
     public Article getArticleByArticleId(@PathVariable Long articleId) {
         return articleService.getArticleByArticleId(articleId);
     }
