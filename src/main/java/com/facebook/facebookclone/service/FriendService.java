@@ -114,7 +114,9 @@ public class FriendService {
             userProfileRepository.findAllByOrderByCreatedAtDesc(pageable).forEach(friendsRecommendList::add);
         }
         Collections.shuffle(friendsRecommendList);
+
         List<FriendObjectMappingFromUserProfile> finalRecommendList = new ArrayList<>();
+
         for (FriendObjectMappingFromUserProfile finalUserProfile : friendsRecommendList) {
             if (!username.equals(finalUserProfile.getUsername())) {
                 finalRecommendList.add(finalUserProfile); // 자신 제외
@@ -123,6 +125,7 @@ public class FriendService {
                 break;
             }
         }
+
         friendsRecommendListMap.put("recommendFriends", finalRecommendList);
         return friendsRecommendListMap;
     }

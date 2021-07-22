@@ -35,7 +35,7 @@ public class UserService {
         String passwordChecker = requestDto.getPasswordChecker();
         String emailAddress = requestDto.getEmailAddress();
 
-        String pattern = "^[ㄱ-ㅎ가-힣a-zA-Z]*$";
+        String pattern = "^[0-9]*$";
 
         Optional<User> found = userRepository.findByEmailAddress(emailAddress);
         if (password.length() < 4) {
@@ -45,7 +45,7 @@ public class UserService {
         } else if (found.isPresent()) {
             throw new IllegalArgumentException("중복된 EmailAddress가 존재합니다.");
         } else if (Pattern.matches(pattern, username)) {
-            throw new IllegalArgumentException("이름에 특수문자나 숫자가 들어갈 수 없습니다.");
+            throw new IllegalArgumentException("이름에 숫자가 들어갈 수 없습니다.");
         }
         password = passwordEncoder.encode(requestDto.getPassword());
         UserRole role = UserRole.USER;
