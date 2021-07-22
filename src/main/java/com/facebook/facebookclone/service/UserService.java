@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -29,7 +31,9 @@ public class UserService {
     }
 
     @Transactional
-    public void registerUser(SignupRequestDto requestDto) {
+    public Map<String, String> registerUser(SignupRequestDto requestDto) {
+        Map<String, String> registerResultMap = new HashMap<>();
+
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
         String passwordChecker = requestDto.getPasswordChecker();
@@ -39,11 +43,17 @@ public class UserService {
 
         Optional<User> found = userRepository.findByEmailAddress(emailAddress);
         if (!password.equals(passwordChecker)) {
-            throw new IllegalArgumentException("password와 passwordChecker가 다릅니다.");
+            registerResultMap.put("msg", "password와 passwordChecker가 다릅니다.");
+            return registerResultMap;
+//            throw new IllegalArgumentException("password와 passwordChecker가 다릅니다.");
         } else if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 EmailAddress가 존재합니다.");
+            registerResultMap.put("msg", "중복된 EmailAddress가 존재합니다.");
+            return registerResultMap;
+//            throw new IllegalArgumentException("중복된 EmailAddress가 존재합니다.");
         } else if (username.matches(pattern)) {
-            throw new IllegalArgumentException("이름에 숫자가 들어갈 수 없습니다.");
+            registerResultMap.put("msg", "이름에 숫자가 들어갈 수 없습니다.");
+            return registerResultMap;
+//            throw new IllegalArgumentException("이름에 숫자가 들어갈 수 없습니다.");
         }
         password = passwordEncoder.encode(requestDto.getPassword());
         UserRole role = UserRole.USER;
@@ -54,5 +64,8 @@ public class UserService {
         User user = new User(username, password, emailAddress, role);
         userRepository.save(user);
         userProfileRepository.save(new UserProfile(username)); // 유저프로필 생성
+
+        registerResultMap.put("msg", "회원가입 완료");
+        return registerResultMap;
     }
 }
