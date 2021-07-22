@@ -2,7 +2,6 @@ package com.facebook.facebookclone.service;
 
 import com.facebook.facebookclone.dto.ArticleRequestDto;
 import com.facebook.facebookclone.model.Article;
-import com.facebook.facebookclone.model.ArticleLikeIt;
 import com.facebook.facebookclone.model.Comment;
 import com.facebook.facebookclone.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -63,8 +61,7 @@ public class ArticleService {
             value.addLikeItCount(likesCount);
 
             // username의 좋아요 여부
-            Optional<ArticleLikeIt> didUsernameLikeIt = Optional.ofNullable(articleLikeItRepository.findByUsernameAndArticleId(username, articleId));
-            value.changeLikeItChecker(didUsernameLikeIt.isPresent());
+            value.changeLikeItChecker(articleLikeItRepository.findByUsernameAndArticleId(username, articleId).isPresent());
 
             articleLikeItRepository.findAllByArticleId(articleId).forEach(value::addLikeItUserList);
         }

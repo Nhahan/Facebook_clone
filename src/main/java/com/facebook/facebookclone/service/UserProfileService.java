@@ -18,19 +18,6 @@ import java.util.Map;
 public class UserProfileService {
 
     private final UserProfileRepository userProfileRepository;
-    private final UserRepository userRepository;
-
-//    @Transactional
-//    public void createPicture(UserProfileRequestDto requestDto) {
-//        UserProfile userProfile = new UserProfile(requestDto);
-//        userProfileRepository.save(userProfile);
-//    }
-//
-//    @Transactional
-//    public void createCover(UserProfileRequestDto requestDto) {
-//        UserProfile userProfile = new UserProfile(requestDto);
-//        userProfileRepository.save(userProfile);
-//    }
 
     @Transactional
     public void putPicture(UserProfileRequestDto requestDto) {
@@ -60,7 +47,7 @@ public class UserProfileService {
         Map<String, List<String>> pictureListMap = new HashMap<>();
         List<String> pictureList = new ArrayList<>();
 
-        userProfileRepository.findAllByUsername(username).forEach(s -> pictureList.add(s.getPicture()));
+        userProfileRepository.findAllByUsername(username).forEach(user -> pictureList.add(user.getPicture()));
 
         pictureListMap.put("pictures", pictureList);
 

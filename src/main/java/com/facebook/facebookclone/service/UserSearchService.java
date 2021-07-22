@@ -43,7 +43,7 @@ public class UserSearchService {
 
     public List<String> getAllUsername() {
         List<String> allUsernameList = new ArrayList<>();
-        userProfileRepository.findAll().forEach(s -> allUsernameList.add(s.getUsername()));
+        userProfileRepository.findAll().forEach(user -> allUsernameList.add(user.getUsername()));
         return allUsernameList;
     }
 }

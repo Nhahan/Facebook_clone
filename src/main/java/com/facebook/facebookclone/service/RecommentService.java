@@ -2,7 +2,6 @@ package com.facebook.facebookclone.service;
 
 import com.facebook.facebookclone.dto.RecommentRequestDto;
 import com.facebook.facebookclone.model.Recomment;
-import com.facebook.facebookclone.model.RecommentLikeIt;
 import com.facebook.facebookclone.repository.RecommentLikeItRepository;
 import com.facebook.facebookclone.repository.RecommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -38,8 +36,7 @@ public class RecommentService {
 
             value.addRecommentLikeItCount(likesCount);
 
-            Optional<RecommentLikeIt> didUsernameLikeIt = Optional.ofNullable(recommentLikeItRepository.findByUsernameAndRecommentId(username, recommentId));
-            value.changeLikeItChecker(didUsernameLikeIt.isPresent());
+            value.changeLikeItChecker(recommentLikeItRepository.findByUsernameAndRecommentId(username, recommentId).isPresent());
         }
         return recommentList;
     }

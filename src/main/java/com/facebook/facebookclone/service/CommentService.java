@@ -2,8 +2,6 @@ package com.facebook.facebookclone.service;
 
 import com.facebook.facebookclone.dto.CommentRequestDto;
 import com.facebook.facebookclone.model.Comment;
-import com.facebook.facebookclone.model.CommentLikeIt;
-import com.facebook.facebookclone.model.Recomment;
 import com.facebook.facebookclone.repository.CommentLikeItRepository;
 import com.facebook.facebookclone.repository.CommentRepository;
 import com.facebook.facebookclone.repository.RecommentRepository;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -45,8 +42,7 @@ public class CommentService {
             value.addRecommentCount(recommentCount);
             value.addCommentLikeItCount(likesCount);
 
-            Optional<CommentLikeIt> didUsernameLikeIt = Optional.ofNullable(commentLikeItRepository.findByUsernameAndCommentId(username, commentId));
-            value.changeLikeItChecker(didUsernameLikeIt.isPresent());
+            value.changeLikeItChecker(commentLikeItRepository.findByUsernameAndCommentId(username, commentId).isPresent());
         }
         return commentList;
     }

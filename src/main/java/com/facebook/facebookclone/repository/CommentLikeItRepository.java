@@ -13,5 +13,5 @@ public interface CommentLikeItRepository extends JpaRepository<CommentLikeIt, Lo
 
     void deleteByUsernameAndCommentId(String username, Long commentId);
 
-    CommentLikeIt findByUsernameAndCommentId(String username, Long commentId);
+    Optional<CommentLikeIt> findByUsernameAndCommentId(String username, Long commentId);
 }
