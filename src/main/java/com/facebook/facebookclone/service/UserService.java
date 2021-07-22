@@ -35,16 +35,14 @@ public class UserService {
         String passwordChecker = requestDto.getPasswordChecker();
         String emailAddress = requestDto.getEmailAddress();
 
-        String pattern = "^[0-9]*$";
+        String pattern = ".*\\d.*";
 
         Optional<User> found = userRepository.findByEmailAddress(emailAddress);
-        if (password.length() < 4) {
-            throw new IllegalArgumentException("password는 최소 4글자입니다.");
-        } else if (!password.equals(passwordChecker)) {
+        if (!password.equals(passwordChecker)) {
             throw new IllegalArgumentException("password와 passwordChecker가 다릅니다.");
         } else if (found.isPresent()) {
             throw new IllegalArgumentException("중복된 EmailAddress가 존재합니다.");
-        } else if (Pattern.matches(pattern, username)) {
+        } else if (username.matches(pattern)) {
             throw new IllegalArgumentException("이름에 숫자가 들어갈 수 없습니다.");
         }
         password = passwordEncoder.encode(requestDto.getPassword());
