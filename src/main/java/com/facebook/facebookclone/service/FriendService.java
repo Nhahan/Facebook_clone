@@ -38,9 +38,9 @@ public class FriendService {
                 if (friendRepository.findAllByUsernameAndFriendName(friendName, username).isEmpty()) {
                     friendRepository.save(new Friend(friendName, username));
                 }
-                // 혹시 모를 오류 방지 코드
-                friendRequestRepository.deleteByUsernameAndFriendName(username, friendName);
-                friendRequestRepository.deleteByUsernameAndFriendName(friendName, username);
+            // 서로의 친구 요청 모두 삭제
+            friendRequestRepository.deleteByUsernameAndFriendName(username, friendName);
+            friendRequestRepository.deleteByUsernameAndFriendName(friendName, username);
             }
         }
     }
@@ -90,7 +90,7 @@ public class FriendService {
         final int sizePerPage = 4; // totalPages * sizePerPage > 12
 
         if (totalUserDataSize <= dataSizeWhenServiceIsSmall) { // 서비스가 너무 작을 때
-            List<FriendObjectMappingFromUserProfile> tempUserList = new ArrayList<>();
+            List<FriendObjectMappingFromUserProfile> tempUserList;
             tempUserList = userProfileRepository.findAllByOrderByModifiedAtDesc();
             Collections.shuffle(tempUserList);
             for (FriendObjectMappingFromUserProfile userProfile : tempUserList) {
@@ -140,22 +140,24 @@ public class FriendService {
             if (friendRequestRepository.findAllByUsernameAndFriendName(username, friendName).isEmpty()) {
                 friendRequestRepository.save(new FriendRequest(username, friendName));
                 requestFriendMsgMap.put("code", "200");
-                requestFriendMsgMap.put("msg", "friend request " + username + " to " + friendName + " has been completed.");
+                requestFriendMsgMap.put
+                        ("msg", "friend request " + username + " to " + friendName + " has been completed.");
             } else {
                 requestFriendMsgMap.put("code", "209");
-                requestFriendMsgMap.put("msg", "friend request " + username + " to " + friendName + " is already in progress.");
+                requestFriendMsgMap.put
+                        ("msg", "friend request " + username + " to " + friendName + " is already in progress.");
             }
         } else {
             requestFriendMsgMap.put("code", "500");
             requestFriendMsgMap.put("msg", "Unregistered users.");
-//            throw new NullPointerException("존재하지 않는 유저입니다."); 프론트 요청으로 에러 메시지 프론트로 리턴 하게끔 변경
         }
         return requestFriendMsgMap;
     }
 
     public Map<String, Boolean> requestFriendChecker(String username, String friendName) {
         Map<String, Boolean> requestFriendCheckerMap = new HashMap<>();
-        requestFriendCheckerMap.put("requestChecker", !friendRequestRepository.findAllByUsernameAndFriendName(username, friendName).isEmpty());
+        requestFriendCheckerMap.put
+                ("requestChecker", !friendRequestRepository.findAllByUsernameAndFriendName(username, friendName).isEmpty());
         return requestFriendCheckerMap;
     }
 

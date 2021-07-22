@@ -16,7 +16,7 @@ public class RecommentController {
     private final RecommentRepository recommentRepository;
     private final RecommentService recommentService;
 
-    @GetMapping("/user/recomment/{username}/{commentId}") // 댓글 전체 조회
+    @GetMapping("/user/recomment/{username}/{commentId}")
     public List<Recomment> readRecomments(@PathVariable String username, @PathVariable Long commentId) {
         List<Recomment> recommentList = recommentRepository.findAllByUsernameAndCommentId(username, commentId);
         return recommentService.recommentLikeItCounter(recommentList, username);

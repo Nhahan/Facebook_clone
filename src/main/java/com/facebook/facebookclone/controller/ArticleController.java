@@ -17,7 +17,7 @@ public class ArticleController {
     private final ArticleRepository articleRepository;
     private final ArticleService articleService;
 
-    @GetMapping("/user/all-article/{username}/{page}/{size}") // 전체 게시글 조회 with size
+    @GetMapping("/user/all-article/{username}/{page}/{size}") // 전체 게시글 조회
     public Page<Article> getAllArticleWithSize(
             @PathVariable String username,
             @PathVariable int page,
@@ -27,7 +27,7 @@ public class ArticleController {
         return articleService.getPagedArticleList(articleList, username);
     }
 
-    @GetMapping("/user/my-article/{username}/{page}/{size}") // username의 전체 게시글 조회 with size
+    @GetMapping("/user/my-article/{username}/{page}/{size}") // username의 전체 게시글 조회
     public Page<Article> getArticleWithSize(
             @PathVariable String username,
             @PathVariable int page,
@@ -37,7 +37,7 @@ public class ArticleController {
         return articleService.getPagedArticleList(articleList, username);
     }
 
-    @GetMapping("/user/article/{articleId}") // 특정 게시글 불러오기
+    @GetMapping("/user/article/{articleId}") // 특정 게시글 조회
     public Article getArticleByArticleId(@PathVariable Long articleId) {
         return articleService.getArticleByArticleId(articleId);
     }

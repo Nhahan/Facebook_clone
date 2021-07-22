@@ -16,7 +16,7 @@ public class CommentController {
     private final CommentRepository commentRepository;
     private final CommentService commentService;
 
-    @GetMapping("/user/comment/{username}/{articleId}") // 댓글 조회
+    @GetMapping("/user/comment/{username}/{articleId}")
     public List<Comment> readComments(@PathVariable String username, @PathVariable Long articleId) {
         List<Comment> commentList = commentRepository.findAllByUsernameAndArticleId(username, articleId);
         return commentService.getCommentWithLikeItCounter(commentList, username);
