@@ -42,18 +42,19 @@ public class UserService {
         String pattern = ".*\\d.*";
 
         Optional<User> found = userRepository.findByEmailAddress(emailAddress);
-        if (!password.equals(passwordChecker)) {
+        registerResultMap.put("code", "500");
+        if (username.matches(pattern)) {
+            registerResultMap.put("msg", "이름에 숫자가 들어갈 수 없습니다.");
+//            throw new IllegalArgumentException("이름에 숫자가 들어갈 수 없습니다.");
+            return registerResultMap;
+        } else if (found.isPresent()) {
+            registerResultMap.put("msg", "중복된 emailAddress가 존재합니다.");
+//            throw new IllegalArgumentException("중복된 emailAddress가 존재합니다.");
+            return registerResultMap;
+        } else if (!password.equals(passwordChecker)) {
             registerResultMap.put("msg", "password와 passwordChecker가 다릅니다.");
             return registerResultMap;
 //            throw new IllegalArgumentException("password와 passwordChecker가 다릅니다.");
-        } else if (found.isPresent()) {
-            registerResultMap.put("msg", "중복된 EmailAddress가 존재합니다.");
-            return registerResultMap;
-//            throw new IllegalArgumentException("중복된 EmailAddress가 존재합니다.");
-        } else if (username.matches(pattern)) {
-            registerResultMap.put("msg", "이름에 숫자가 들어갈 수 없습니다.");
-            return registerResultMap;
-//            throw new IllegalArgumentException("이름에 숫자가 들어갈 수 없습니다.");
         }
         password = passwordEncoder.encode(requestDto.getPassword());
         UserRole role = UserRole.USER;
@@ -65,6 +66,7 @@ public class UserService {
         userRepository.save(user);
         userProfileRepository.save(new UserProfile(username)); // 유저프로필 생성
 
+        registerResultMap.put("code", "200");
         registerResultMap.put("msg", "회원가입 완료");
         return registerResultMap;
     }
