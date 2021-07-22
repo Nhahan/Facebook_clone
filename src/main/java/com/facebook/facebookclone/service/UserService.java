@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService {
@@ -34,6 +35,8 @@ public class UserService {
         String passwordChecker = requestDto.getPasswordChecker();
         String emailAddress = requestDto.getEmailAddress();
 
+        String pattern = "^[ㄱ-ㅎ가-힣a-zA-Z]*$";
+
         Optional<User> found = userRepository.findByEmailAddress(emailAddress);
         if (password.length() < 4) {
             throw new IllegalArgumentException("password는 최소 4글자입니다.");
@@ -41,6 +44,8 @@ public class UserService {
             throw new IllegalArgumentException("password와 passwordChecker가 다릅니다.");
         } else if (found.isPresent()) {
             throw new IllegalArgumentException("중복된 EmailAddress가 존재합니다.");
+        } else if (Pattern.matches(pattern, username)) {
+            throw new IllegalArgumentException("이름에 특수문자나 숫자가 들어갈 수 없습니다.");
         }
         password = passwordEncoder.encode(requestDto.getPassword());
         UserRole role = UserRole.USER;
