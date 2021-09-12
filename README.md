@@ -10,6 +10,7 @@
 - 스택 : React/Spring
 - 형상 관리 툴 : Git
 
+
 ## **☝🏻 프로젝트 특징**
 
 - 게시물, 댓글, 좋아요의 CRUD 개발
@@ -19,10 +20,11 @@
 - Swagger를 이용하여 API 목록 문서화 자동화
 
 
+
 ## 🎈 개발 환경 
     - 프론트: AWS S3
     - 백엔드: AWS EC2
-    - DB : AWS RDS
+    - DB : AWS RDS / MySql
  
    - Framwork : spring
    - IntelliJ Ultimate  
